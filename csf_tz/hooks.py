@@ -109,6 +109,8 @@ fixtures = [
 		"Student Applicant-program_enrollment",
 		"Company-bypass_material_request_validation",
 		"Operation-image",
+		"Loan Type-ristrict_to_date",
+		"Loan Type-loan_factor",
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Sales Invoice-pos_profile-in_standard_filter",
@@ -298,6 +300,9 @@ doc_events = {
 	},
 	"Student Applicant": {
 		"on_update_after_submit":"csf_tz.csftz_hooks.student_applicant.make_student_applicant_fees",
+	},
+	"Loan": {
+	"validate":"csf_tz.csftz_hooks.loan.validate",
 	},
 }
 
