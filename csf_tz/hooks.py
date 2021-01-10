@@ -113,6 +113,7 @@ fixtures = [
 		"Employee-files",
 		"Fees-base_grand_total",
 		"Fees-advance_paid",
+		"Sales Invoice-default_item_discount",
 	)]]},
 	{"doctype":"Property Setter", "filters": [["name", "in", (
 		"Sales Invoice-pos_profile-in_standard_filter",

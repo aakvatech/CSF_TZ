@@ -43,6 +43,13 @@ frappe.ui.form.on("Sales Invoice", {
             }
         }, 1000);
     },
+    default_item_discount: function (frm) {
+        frm.doc.items.forEach(item => {
+            if (item.discount_percentage) {
+                frappe.model.set_value(item.doctype, item.name, 'discount_percentage', frm.doc.default_item_discount);
+            }
+        });
+    },
     // update_stock: (frm) => {
     //     const warehouse_field = frappe.meta.get_docfield("Sales Invoice Item", "warehouse", frm.doc.name);
     //     const item_field = frappe.meta.get_docfield("Sales Invoice Item", "item_code", frm.doc.name);
