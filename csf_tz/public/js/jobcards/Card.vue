@@ -54,7 +54,7 @@
               v-model="cardData.operation.description"
               hide-details
             >
-           </v-textarea>
+            </v-textarea>
           </v-col>
           <v-col lg="3" md="3" cols="12">
             <v-list-item-subtitle class="subtitle-1 mb-1">
@@ -76,12 +76,12 @@
               auto-select-first
               outlined
               color="indigo"
-              label="Employee"
+              label="Team Leader"
               v-model="cardData.employee"
               :items="employees"
               item-text="name"
               background-color="white"
-              no-data-text="Customer not found"
+              no-data-text="Employee not found"
               hide-details
               :readonly="cardData.employee ? true : false"
               :filter="customFilter"
@@ -103,6 +103,37 @@
           </v-col>
         </v-row>
         <v-row class="mx-3">
+          <v-col lg="9" md="9" cols="12">
+            <v-autocomplete
+              dense
+              auto-select-first
+              outlined
+              color="indigo"
+              label="Station Members"
+              v-model="members"
+              :items="employees"
+              item-text="name"
+              background-color="white"
+              no-data-text="Employee not found"
+              hide-details
+              :filter="customFilter"
+              multiple
+            >
+              <template v-slot:item="data">
+                <template>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      class="indigo--text subtitle-1"
+                      v-html="data.item.name"
+                    ></v-list-item-title>
+                    <v-list-item-subtitle
+                      v-html="`${data.item.employee_name}`"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-autocomplete>
+          </v-col>
           <v-col lg="9" md="9" cols="12">
             <v-textarea
               class="my-2"
@@ -190,18 +221,19 @@
 </template>
 
 <script>
-import { evntBus } from "./bus";
+import { evntBus } from './bus';
 export default {
   data: () => ({
     Dialog: false,
-    cardData: "",
-    employees: "",
+    cardData: '',
+    employees: '',
+    members: [],
     completed_qty: 0,
     timer: {
-      hours: "00",
-      minutes: "00",
-      seconds: "00",
-      interval: "",
+      hours: '00',
+      minutes: '00',
+      seconds: '00',
+      interval: '',
     },
   }),
   watch: {
@@ -220,15 +252,15 @@ export default {
     start_job() {
       let row = frappe.model.add_child(
         this.cardData,
-        "Job Card Time Log",
-        "time_logs"
+        'Job Card Time Log',
+        'time_logs'
       );
       row.from_time = frappe.datetime.now_datetime();
-      row.name = "";
+      row.name = '';
       row.completed_qty = 0;
       this.cardData.job_started = 1;
       this.cardData.started_time = row.from_time;
-      this.cardData.status = "Work In Progress";
+      this.cardData.status = 'Work In Progress';
       if (!frappe.flags.resume_job) {
         this.cardData.current_time = 0;
       }
@@ -237,7 +269,7 @@ export default {
     },
     start_por() {
       if (!this.cardData.employee) {
-        evntBus.$emit("show_messag", "Please set Employee");
+        evntBus.$emit('show_messag', 'Please set Employee');
       } else {
         this.start_job();
       }
@@ -252,13 +284,13 @@ export default {
         this.cardData.total_completed_qty + flt(this.completed_qty)
       ) {
         evntBus.$emit(
-          "show_messag",
-          "The completed quantity cannot be greater than the required quantity"
+          'show_messag',
+          'The completed quantity cannot be greater than the required quantity'
         );
         return;
       }
       frappe.flags.pause_job = 1;
-      this.cardData.status = "On Hold";
+      this.cardData.status = 'On Hold';
       clearInterval(this.timer.interval);
       this.complete_job();
     },
@@ -266,7 +298,7 @@ export default {
       const vm = this;
       let employees;
       frappe.call({
-        method: "csf_tz.csf_tz.page.jobcards.jobcards.get_employees",
+        method: 'csf_tz.csf_tz.page.jobcards.jobcards.get_employees',
         args: { company: this.cardData.company },
         async: false,
         callback: function (r) {
@@ -287,19 +319,19 @@ export default {
       );
     },
     set_timer() {
-      if (this.cardData.status == "Completed") {
+      if (this.cardData.status == 'Completed') {
         return;
       }
       const vm = this;
       let currentIncrement = this.cardData.current_time || 0;
       if (this.cardData.started_time || this.cardData.current_time) {
-        if (this.cardData.status == "On Hold") {
+        if (this.cardData.status == 'On Hold') {
           updateStopwatch(currentIncrement);
           clearInterval(this.timer.interval);
         } else {
           currentIncrement += moment(frappe.datetime.now_datetime()).diff(
             moment(this.cardData.started_time),
-            "seconds"
+            'seconds'
           );
           initialiseTimer();
         }
@@ -317,11 +349,11 @@ export default {
           const seconds = increment - hours * 3600 - minutes * 60;
 
           vm.timer.hours =
-            hours < 10 ? "0" + hours.toString() : hours.toString();
+            hours < 10 ? '0' + hours.toString() : hours.toString();
           vm.timer.minutes =
-            minutes < 10 ? "0" + minutes.toString() : minutes.toString();
+            minutes < 10 ? '0' + minutes.toString() : minutes.toString();
           vm.timer.seconds =
-            seconds < 10 ? "0" + seconds.toString() : seconds.toString();
+            seconds < 10 ? '0' + seconds.toString() : seconds.toString();
         }
 
         function setCurrentIncrement() {
@@ -340,11 +372,11 @@ export default {
 
           if (frappe.flags.pause_job) {
             let currentIncrement =
-              moment(d.to_time).diff(moment(d.from_time), "seconds") || 0;
+              moment(d.to_time).diff(moment(d.from_time), 'seconds') || 0;
             this.cardData.current_time =
               currentIncrement + (this.cardData.current_time || 0);
           } else {
-            this.cardData.started_time = "";
+            this.cardData.started_time = '';
             this.cardData.job_started = 0;
             this.cardData.current_time = 0;
           }
@@ -353,16 +385,23 @@ export default {
       });
     },
     submit_dialog() {
-      this.cardData.status = "Completed";
-      this.save("Submit");
+      this.cardData.status = 'Completed';
+      this.save('Submit');
       this.close_dialog();
     },
-    save(action = "Save") {
+    save(action = 'Save') {
       const vm = this;
       const doc = { ...this.cardData };
-      delete doc["operation"];
+      doc.members = [];
+      this.members.forEach((element) => {
+        let employee_name =
+          this.employees.find((emp) => emp.name == element).employee_name || '';
+        doc.members.push({ employee: element, employee_name: employee_name });
+      });
+
+      delete doc['operation'];
       frappe.call({
-        method: "csf_tz.csf_tz.page.jobcards.jobcards.save_doc",
+        method: 'csf_tz.csf_tz.page.jobcards.jobcards.save_doc',
         args: {
           doc: doc,
           action: action,
@@ -371,6 +410,10 @@ export default {
         callback: function (r) {
           if (r.message) {
             r.message.operation = vm.cardData.operation;
+            vm.members = [];
+            r.message.members.forEach((element) => {
+              vm.members.push(element.employee);
+            });
             Object.assign(vm.cardData, r.message);
           }
         },
@@ -378,15 +421,32 @@ export default {
     },
   },
   created: function () {
-    evntBus.$on("open_card", (job_card) => {
+    evntBus.$on('open_card', (job_card) => {
+      const vm = this;
       this.Dialog = true;
       this.cardData = job_card;
-      (this.timer = {
-        hours: "00",
-        minutes: "00",
-        seconds: "00",
-      }),
-        this.set_timer();
+      this.members = [];
+      frappe.call({
+        method: 'frappe.client.get',
+        args: {
+          doctype: 'Job Card',
+          name: job_card.name,
+        },
+        callback(r) {
+          if (r.message) {
+            vm.cardData = r.message;
+            r.message.members.forEach((element) => {
+              vm.members.push(element.employee);
+            });
+            vm.timer = {
+              hours: '00',
+              minutes: '00',
+              seconds: '00',
+            };
+            vm.set_timer();
+          }
+        },
+      });
     });
   },
 };
