@@ -6,14 +6,22 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from csf_tz.csf_tz.doctype.piecework_single.piecework_single import (
+    validate_additional_salary,
+)
 
 
 class Piecework(Document):
     def before_submit(self):
         create_additional_salaries(self)
 
+    def before_cancel(self):
+        validate_additional_salary(self)
+
     def validate(self):
-        self.total = self.quantity * frappe.db.get_value('Piecework Type', self.task, 'rate')
+        self.total = self.quantity * frappe.db.get_value(
+            "Piecework Type", self.task, "rate"
+        )
         employees = []
         amount = self.total / len(self.employees)
         for row in self.employees:
@@ -22,7 +30,10 @@ class Piecework(Document):
                 row.amount = amount
             else:
                 frappe.throw(
-                    "The employee '{0}' is this duplicate in the table in row {1}".format(row.employee, row.idx))
+                    "The employee '{0}' is this duplicate in the table in row {1}".format(
+                        row.employee, row.idx
+                    )
+                )
 
 
 def create_additional_salaries(doc):
@@ -30,7 +41,7 @@ def create_additional_salaries(doc):
         if row.employee and row.amount:
             as_doc = frappe.new_doc("Additional Salary")
             as_doc.employee = row.employee
-            as_doc.salary_component = 'Piecework'
+            as_doc.salary_component = "Piecework"
             as_doc.amount = row.amount
             as_doc.payroll_date = doc.date
             as_doc.company = doc.company
@@ -38,5 +49,9 @@ def create_additional_salaries(doc):
             as_doc.insert(ignore_permissions=True)
             row.additional_salary = as_doc.name
             as_doc.submit()
-            frappe.msgprint(_("Additional Salary {0} created for employee {1}").format(
-                as_doc.name, row.employee), alert=True)
+            frappe.msgprint(
+                _("Additional Salary {0} created for employee {1}").format(
+                    as_doc.name, row.employee
+                ),
+                alert=True,
+            )

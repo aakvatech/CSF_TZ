@@ -12,6 +12,9 @@ class PieceworkSingle(Document):
     def before_submit(self):
         create_additional_salaries(self)
 
+    def before_cancel(self):
+        validate_additional_salary(self)
+
 
 def create_additional_salaries(doc):
     for row in doc.employees:
@@ -31,4 +34,17 @@ def create_additional_salaries(doc):
                     as_doc.name, row.employee
                 ),
                 alert=True,
+            )
+
+
+def validate_additional_salary(doc):
+    for row in doc.employees:
+        status = frappe.get_value(
+            "Additional Salary", row.additional_salary, "docstatus"
+        )
+        if status == 1:
+            frappe.throw(
+                _(
+                    "Pieceworks cannot be cancelled once the Payroll Entry / Additional Salary {0} is submited"
+                ).format(row.additional_salary)
             )
