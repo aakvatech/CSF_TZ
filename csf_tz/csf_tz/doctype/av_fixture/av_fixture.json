@@ -1,0 +1,56 @@
+{
+ "creation": "2021-06-05 14:05:56.379216",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "custom_doctype",
+  "identified_filter",
+  "identified_app",
+  "required_doctype"
+ ],
+ "fields": [
+  {
+   "fieldname": "custom_doctype",
+   "fieldtype": "Data",
+   "label": "Custom Doctype"
+  },
+  {
+   "fieldname": "identified_filter",
+   "fieldtype": "Data",
+   "label": "Identified Filter"
+  },
+  {
+   "fieldname": "identified_app",
+   "fieldtype": "Data",
+   "label": "Identified App"
+  },
+  {
+   "fieldname": "required_doctype",
+   "fieldtype": "Data",
+   "label": "Required Doctyope"
+  }
+ ],
+ "modified": "2021-06-05 14:05:56.379216",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "AV Fixture",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
