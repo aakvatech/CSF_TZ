@@ -18,7 +18,7 @@ class AVFixture(Document):
                     for filter in filters:
                         for identified_filter in list(filter[2]):
                             required_doctype = identified_filter.split("-")[0]
-
+                        """
                         frappe.db.new_doc({
                             "doctype": "Av Fixture",
                             "custom_doctype": custom_doctype,
@@ -26,6 +26,7 @@ class AVFixture(Document):
                             "identified_app": identified_app,
                             "required_doctype": required_doctype
                             }).insert()
+                            """
     validate()                    
                         
 """
