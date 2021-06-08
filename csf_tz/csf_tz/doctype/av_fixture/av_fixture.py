@@ -6,9 +6,10 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
+
 class AVFixture(Document):
-    def validate():
-        frappe.msgprint("validate")
+    def create_fixture():
+        #frappe.msgprint("validate")
         for identified_app in frappe.get_installed_apps():
             for hook in frappe.get_hooks("fixtures", app_name=identified_app):
                 filters = None
@@ -18,29 +19,12 @@ class AVFixture(Document):
                     for filter in filters:
                         for identified_filter in list(filter[2]):
                             required_doctype = identified_filter.split("-")[0]
-                        """
-                        frappe.db.new_doc({
-                            "doctype": "Av Fixture",
-                            "custom_doctype": custom_doctype,
-                            "identified_filter": identified_filter,
-                            "identified_app": identified_app,
-                            "required_doctype": required_doctype
-                            }).insert()
-                            """
-    validate()                    
-                        
-"""
-av_fixture = frappe.new_doc("AV Fixture")
+                            
+                            doc=frappe.new_doc("AV Fixture")
+                            doc.custom_doctype = custom_doctype
+                            doc.identified_filter = identified_filter
+                            doc.identified_app = identified_app
+                            doc.required_doctype = required_doctype
+                            doc.insert()
+    create_fixture()
 
-av_fixture.identified_app=identified_app
-av_fixture.custom_doctype=custom_doctype
-av_fixture.identified_filter=identified_filter
-av_fixture.required_doctype=required_doctype
-frappe.db.commit()
-av_fixture.insert()
-    """
-
-    #create_fixture()
-    
-#if not frappe.db.exist("AV Fixture", doc.name):
-#return 
