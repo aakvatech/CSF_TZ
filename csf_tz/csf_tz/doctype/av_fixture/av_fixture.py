@@ -19,12 +19,12 @@ class AVFixture(Document):
                     for filter in filters:
                         for identified_filter in list(filter[2]):
                             required_doctype = identified_filter.split("-")[0]
-                            
+                            """
                             doc=frappe.new_doc("AV Fixture")
                             doc.custom_doctype = custom_doctype
                             doc.identified_filter = identified_filter
                             doc.identified_app = identified_app
                             doc.required_doctype = required_doctype
-                            doc.insert()
-    create_fixture()
+                            doc.insert()"""
+    #create_fixture()
 
