@@ -130,7 +130,6 @@ fixtures = [
                     "Stock Entry-driver",
                     "Stock Entry-final_destination",
                     "Stock Entry-item_uom",
-                    "Stock Entry-qty",
                     "Stock Entry-repack_qty",
                     "Stock Entry-repack_template",
                     "Stock Entry-total_net_weight",
