@@ -29,7 +29,7 @@ def execute(filters=None):
 	""", as_dict = 1)
 
 	skipped = 0
-	prev_row = {"actual_qty": 0, "qty_after_transaction": 0, "voucher_no": "", "voucher_type": "Header"}
+	prev_row = {"posting_date": "2000-01-01", "posting_time": "00:00:00", "actual_qty": 0, "qty_after_transaction": 0, "voucher_no": "", "voucher_type": "Header"}
 	data.append(prev_row)
 	for item in item_list:
 		item_wh_sle_list = frappe.db.get_all("Stock Ledger Entry", 
@@ -41,7 +41,7 @@ def execute(filters=None):
 			continue
 		total_records += len(item_wh_sle_list) or 0
 
-		prev_row = {"actual_qty": 0, "qty_after_transaction": 0, "voucher_no": "", "voucher_type": "First"}
+		prev_row = {"posting_date": "2000-01-01", "posting_time": "00:00:00", "actual_qty": 0, "qty_after_transaction": 0, "voucher_no": "", "voucher_type": "First"}
 		for item_wh_sle in item_wh_sle_list:
 			if prev_row["voucher_type"] == "First" or item_wh_sle.voucher_type == "Stock Reconciliation":
 				skipped += 1
@@ -60,8 +60,8 @@ def execute(filters=None):
 					}
 
 					data.append({
-						"posting_date": item_wh_sle.posting_date, 
-						"posting_time": item_wh_sle.posting_time, 
+						"posting_date": prev_row["posting_date"],
+						"posting_time": prev_row["posting_time"], 
 						"group": item_wh_sle.name, 
 						"voucher_type": prev_row["voucher_type"], 
 						"voucher_no": prev_row["voucher_no"], 
@@ -72,6 +72,8 @@ def execute(filters=None):
 					})
 					
 					data.append(row)
+			prev_row["actual_qty"] = item_wh_sle.posting_date
+			prev_row["actual_qty"] = item_wh_sle.posting_time
 			prev_row["actual_qty"] = item_wh_sle.actual_qty
 			prev_row["qty_after_transaction"] = item_wh_sle.qty_after_transaction
 			prev_row["voucher_no"] = item_wh_sle.voucher_no
