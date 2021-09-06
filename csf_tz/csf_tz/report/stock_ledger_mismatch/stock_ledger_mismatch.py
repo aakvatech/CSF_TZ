@@ -6,9 +6,10 @@ from frappe import _
 from frappe.utils import flt
 
 def execute(filters=None):
-	columns, data = [], []
 
 	columns = [
+		{"fieldname": "posting_date","label": _("Posting Date"),"fieldtype": "Date","width": 200},
+		{"fieldname": "posting_time","label": _("Posting Time"),"fieldtype": "Time","width": 200},
 		{"fieldname": "group","label": _("Diff Group"),"fieldtype": "Data","width": 200},
 		{"fieldname": "voucher_type","label": _("Voucher Type"),"fieldtype": "Data","width": 200},
 		{"fieldname": "voucher_no","label": _("Voucher No"),"fieldtype": "Data","width": 200},
@@ -33,7 +34,7 @@ def execute(filters=None):
 	for item in item_list:
 		item_wh_sle_list = frappe.db.get_all("Stock Ledger Entry", 
 			filters = [["posting_date", ">=", filters.from_date], ["posting_date", "<=", filters.end_date], ["item_code", "=", item.item_code], ["warehouse", "=", item.warehouse], ["is_cancelled", "=", 0], ["docstatus", "=", 1]],
-			fields = ["name", "voucher_type", "voucher_no", "actual_qty", "qty_after_transaction"],
+			fields = ["posting_date", "posting_time", "name", "voucher_type", "voucher_no", "actual_qty", "qty_after_transaction"],
 			order_by = "posting_date asc, posting_time asc"
 		)
 		if not item_wh_sle_list or len(item_wh_sle_list) == 1:
@@ -46,9 +47,30 @@ def execute(filters=None):
 				skipped += 1
 			else:
 				if flt(prev_row["qty_after_transaction"], 2) + flt(item_wh_sle.actual_qty, 2) != flt(item_wh_sle.qty_after_transaction, 2):
-					row = {"group": item_wh_sle.name, "voucher_type": item_wh_sle.voucher_type, "voucher_no": item_wh_sle.voucher_no, "item_code": item.item_code,"warehouse": item.warehouse, "actual_qty": item_wh_sle.actual_qty, "qty_after_transaction": item_wh_sle.qty_after_transaction}
+					row = {
+						"posting_date": item_wh_sle.posting_date,  
+						"posting_time": item_wh_sle.posting_time,
+						"group": item_wh_sle.name, 
+						"voucher_type": item_wh_sle.voucher_type, 
+						"voucher_no": item_wh_sle.voucher_no, 
+						"item_code": item.item_code,
+						"warehouse": item.warehouse, 
+						"actual_qty": item_wh_sle.actual_qty, 
+						"qty_after_transaction": item_wh_sle.qty_after_transaction
+					}
 
-					data.append({"group": item_wh_sle.name, "voucher_type": prev_row["voucher_type"], "voucher_no": prev_row["voucher_no"], "item_code": item.item_code,"warehouse": item.warehouse, "actual_qty": prev_row["actual_qty"], "qty_after_transaction": prev_row["qty_after_transaction"]})
+					data.append({
+						"posting_date": item_wh_sle.posting_date, 
+						"posting_time": item_wh_sle.posting_time, 
+						"group": item_wh_sle.name, 
+						"voucher_type": prev_row["voucher_type"], 
+						"voucher_no": prev_row["voucher_no"], 
+						"item_code": item.item_code,
+						"warehouse": item.warehouse, 
+						"actual_qty": prev_row["actual_qty"], 
+						"qty_after_transaction": prev_row["qty_after_transaction"]
+					})
+					
 					data.append(row)
 			prev_row["actual_qty"] = item_wh_sle.actual_qty
 			prev_row["qty_after_transaction"] = item_wh_sle.qty_after_transaction
