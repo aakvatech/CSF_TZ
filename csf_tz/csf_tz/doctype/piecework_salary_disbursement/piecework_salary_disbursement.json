@@ -1,0 +1,85 @@
+{
+ "actions": [],
+ "autoname": "format:start_date-end_date-######",
+ "creation": "2021-07-01 18:11:07.506913",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "start_date",
+  "end_date",
+  "payroll_date",
+  "column_break_3",
+  "earning_salary_component",
+  "deduction_salary_component",
+  "section_break_6",
+  "employee"
+ ],
+ "fields": [
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payroll_date",
+   "fieldtype": "Date",
+   "label": "Payroll Date"
+  },
+  {
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Table",
+   "label": "Employee",
+   "options": "Employee Piecework Additional Salary"
+  },
+  {
+   "fieldname": "earning_salary_component",
+   "fieldtype": "Link",
+   "label": "Earning Salary Component ",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "deduction_salary_component",
+   "fieldtype": "Link",
+   "label": "Deduction Salary Component",
+   "options": "Salary Component"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-07-03 12:37:00.405085",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Piecework Salary Disbursement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -10,6 +10,7 @@
   "party",
   "receivable_payable_account",
   "bank_cash_account",
+  "account_currency",
   "col_break1",
   "from_date",
   "to_date",
@@ -123,6 +124,13 @@
    "label": "Invoices",
    "options": "Payment Reconciliation Pro Invoice",
    "read_only": 1
+  },
+  {
+   "fetch_from": "receivable_payable_account.account_currency",
+   "fieldname": "account_currency",
+   "fieldtype": "Data",
+   "label": "Account Currency",
+   "read_only": 1
   }
  ],
  "hide_toolbar": 1,
@@ -130,7 +138,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2020-11-29 19:29:04.760248",
+ "modified": "2021-07-01 07:42:19.523253",
  "modified_by": "Administrator",
  "module": "CSF TZ",
  "name": "Payment Reconciliation Pro",

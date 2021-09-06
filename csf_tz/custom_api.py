@@ -157,15 +157,42 @@ def print_out(message, alert= False, add_traceback=False, to_error_log=False ):
 
 
 def get_stock_ledger_entries(item_code):
-    conditions = " and item_code = '%s'" % item_code
+    if get_version() == 12:
+        conditions = " and item_code = '%s'" % item_code
+    else:
+        conditions = " and is_cancelled = 0 and item_code = '%s'" % item_code
     return frappe.db.sql("""
         select item_code, batch_no, warehouse, sum(actual_qty) as actual_qty
         from `tabStock Ledger Entry`
-        where docstatus < 2  %s
-        group by voucher_no, batch_no, item_code, warehouse
+        where docstatus = 1 %s
+        group by batch_no, item_code, warehouse
+        having sum(actual_qty) > 0
         order by item_code, warehouse""" %
         conditions, as_dict=1)
 
+def get_version():
+    branch_name = get_app_branch("erpnext")
+    if "12" in branch_name:
+        return 12
+    elif "13" in branch_name:
+        return 13
+    else:
+        return 13
+
+
+def get_app_branch(app):
+    """Returns branch of an app"""
+    import subprocess
+
+    try:
+        branch = subprocess.check_output(
+            "cd ../apps/{0} && git rev-parse --abbrev-ref HEAD".format(app), shell=True
+        )
+        branch = branch.decode("utf-8")
+        branch = branch.strip()
+        return branch
+    except Exception:
+        return ""
 
 @frappe.whitelist()
 def get_item_info(item_code):
@@ -664,10 +691,12 @@ def validate_item_remaining_qty(item_code, company, warehouse = None, stock_qty 
         return
     is_stock_item = frappe.get_value("Item",item_code,"is_stock_item")
     if is_stock_item == 1:
-        pending_delivery_item_count = get_pending_delivery_item_count(item_code, company, warehouse) or 0
         item_balance = get_item_balance(item_code, company, warehouse) or 0
+        if not item_balance:
+            frappe.throw(_("<B>{0}</B> item balance is ZERO. Cannot proceed unless Allow Over Sell").format(item_code))
+        pending_delivery_item_count = get_pending_delivery_item_count(item_code, company, warehouse) or 0
         # The float(stock_qty) is removed to allow ignore the item itself
-        item_remaining_qty =  item_balance - (pending_delivery_item_count - float(stock_qty))
+        item_remaining_qty =  item_balance - pending_delivery_item_count - float(stock_qty)
         if float(stock_qty) > item_remaining_qty:
             frappe.throw(_("Item Balance: '{2}', Pending delivery: '{3}', Remaining Qty for '{0}' Is: '{1}'".format(item_code, item_remaining_qty, item_balance, pending_delivery_item_count)))
 

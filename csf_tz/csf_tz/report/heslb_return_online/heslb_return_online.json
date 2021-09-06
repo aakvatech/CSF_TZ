@@ -1,0 +1,57 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2021-08-16 18:44:28.095692",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2021-08-16 18:44:28.095692",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "HESLB Return online",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT emp.heslb_f4_index_number AS \"F4indexno:Data:150\", \r\n       CONCAT_WS(' ', emp.last_name,emp.first_name,emp.middle_name) AS \"FullName:Data:150\",\r\n       ssd.amount AS \"AmountDeducted:Float/2:150\"\r\nFROM `tabSalary Slip` ss RIGHT JOIN `tabEmployee` emp ON ss.employee = emp.name AND emp.heslb_f4_index_number != \"\"\r\n                         LEFT JOIN `tabSalary Detail` ssd ON ss.name = ssd.parent AND ssd.salary_component = 'HESLB'\r\nWHERE ss.docstatus = 1 \r\nAND   ss.start_date >= %(from_date)s\r\nAND   ss.end_date <= %(to_date)s\r\nORDER BY emp.name",
+ "ref_doctype": "Salary Slip",
+ "report_name": "HESLB Return online",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "Employee"
+  },
+  {
+   "role": "Leave Approver"
+  },
+  {
+   "role": "All"
+  },
+  {
+   "role": "Employee Self Service"
+  }
+ ]
+}

@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:report",
+ "creation": "2021-07-03 19:47:10.912884",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "report",
+  "column_break_3",
+  "active",
+  "section_break_4",
+  "script",
+  "column_break_6",
+  "html_format"
+ ],
+ "fields": [
+  {
+   "fieldname": "report",
+   "fieldtype": "Link",
+   "label": "Report",
+   "options": "Report",
+   "unique": 1
+  },
+  {
+   "fieldname": "script",
+   "fieldtype": "Code",
+   "label": "Script"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Active"
+  },
+  {
+   "fieldname": "html_format",
+   "fieldtype": "Code",
+   "label": "HTML Format"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2021-07-03 21:06:38.708568",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "AV Report Extension",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

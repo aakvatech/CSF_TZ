@@ -1,0 +1,113 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "creation": "2021-07-03 11:34:51.032119",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 1,
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Piecework",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Piecework",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Single Piecework",
+   "link_to": "Piecework Single",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Group Piecework",
+   "link_to": "Piecework",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salary Disbursement",
+   "link_to": "Piecework Salary Disbursement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Piecework Type",
+   "link_to": "Piecework Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Piecework Net Pay",
+   "link_to": "Piecework Net Pay",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2021-07-05 17:38:33.416116",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Piecework",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 0,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "Single Piecework",
+   "link_to": "Piecework Single",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Group Piecework",
+   "link_to": "Piecework",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Salary Disbursement",
+   "link_to": "Piecework Salary Disbursement",
+   "type": "DocType"
+  }
+ ]
+}

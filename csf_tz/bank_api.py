@@ -17,6 +17,7 @@ from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_ent
 from frappe.utils.background_jobs import enqueue
 from datetime import datetime
 from frappe.utils.password import get_decrypted_password
+from csf_tz.csf_tz.doctype.csf_api_response_log.csf_api_response_log import add_log
 
 
 class ToObject(object):
@@ -48,8 +49,6 @@ def get_nmb_token(company):
     if not url:
         frappe.throw(_("Please set NMB URL in Company {0}".format(company)))
     url = url + str("auth")
-    frappe.msgprint(_("NMB would be contacted for token"))
-    return
     username = frappe.get_value("Company", company, "nmb_username")
     if not username:
         frappe.throw(_("Please set NMB User Name in Company {0}".format(company)))
@@ -65,6 +64,14 @@ def get_nmb_token(company):
             r = requests.post(url, data=json.dumps(data), timeout=5)
             r.raise_for_status()
             frappe.logger().debug({"get_nmb_token webhook_success": r.text})
+            if json.loads(r.text):
+                add_log(
+                    request_type="NMB token",
+                    request_url=url,
+                    request_header="no header",
+                    request_body=json.dumps(data),
+                    response_data=json.loads(r.text),
+                )
             if json.loads(r.text)["status"] == 1:
                 return json.loads(r.text)["token"]
             else:
@@ -83,20 +90,29 @@ def send_nmb(method, data, company):
     if not url:
         frappe.throw(_("Please set NMB URL in Company {0}".format(company)))
     data["token"] = get_nmb_token(company)
-    frappe.msgprint(_("NMB would be contacted for {0}").format(method))
-    return
     url = url + str(method)
     for i in range(3):
         try:
             r = requests.post(url, data=json.dumps(data), timeout=5)
             r.raise_for_status()
             frappe.logger().debug({"send_nmb webhook_success": r.text})
+            if json.loads(r.text):
+                add_log(
+                    request_type="NMB " + method,
+                    request_url=url,
+                    request_header="no header",
+                    request_body=json.dumps(data),
+                    response_data=json.loads(r.text),
+                )
             if json.loads(r.text)["status"] == 1:
                 frappe.msgprint(
                     "Response from bank:<br><hr>" + json.loads(r.text)["description"]
                 )
                 return json.loads(r.text)
             else:
+                print(json.loads(r.text)["description"])
+                if json.loads(r.text)["description"] == "Duplicate Invoice Number":
+                    return json.loads(r.text)
                 frappe.msgprint(
                     "Error detected at bank:<br><hr>"
                     + json.loads(r.text)["description"]
@@ -199,7 +215,9 @@ def make_payment_entry(method="callback", **kwargs):
             fees_name = doc_info["name"]
             bank_reference = frappe.get_value("Fees", fees_name, "bank_reference")
             if bank_reference == nmb_doc.reference:
-                payment_entry = get_payment_entry("Fees", fees_name, party_amount=nmb_amount)
+                payment_entry = get_payment_entry(
+                    "Fees", fees_name, party_amount=nmb_amount
+                )
                 payment_entry.update(
                     {
                         "reference_no": nmb_doc.reference,
@@ -423,6 +441,7 @@ def get_fees_default_accounts(company):
             )
         )
     return data
+
 
 @frappe.whitelist()
 def make_payment_entry_from_call(docname):

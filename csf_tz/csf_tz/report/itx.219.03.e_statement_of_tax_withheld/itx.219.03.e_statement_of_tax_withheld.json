@@ -1,0 +1,57 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2021-08-13 12:28:43.544884",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2021-08-13 12:28:43.544884",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "ITX.219.03.E Statement of Tax Withheld",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\t\n    IF(e.employment_type != 'Temporary', \"PERM\", \"TEMP\") AS \"NATURE OF EMPLOYEMENT:Data:200\",\n    COUNT(*) AS \"NUMBER OF EMPLOYEE:Integer:200\",\n    SUM(IF(sdb.salary_component = 'Basic', sdb.amount, 0)) AS \"BASIC SALARY:Currency:200\",\n    SUM(ss.gross_pay) - SUM(IF(sdb.salary_component = 'Basic', sdb.amount, 0)) AS \"OTHER ALLOWANCES:Currency:200\",\n    SUM(ss.gross_pay) \"GROSS PAYMENT:Currency:200\",\n    SUM(IF(sdd.salary_component = 'NSSF', sdd.amount, 0)) AS \"EXEMPTION:Currency:200\",\n    SUM(ss.gross_pay) - SUM(IF(sdd.salary_component = 'NSSF', sdd.amount, 0)) AS \"AMOUNT SUBJECT TO SDL:Currency:200\"\nFROM `tabSalary Slip` ss LEFT JOIN `tabEmployee` e ON ss.employee = e.name\n                         LEFT JOIN `tabSalary Detail` sdb ON ss.name = sdb.parent AND sdb.salary_component = 'Basic'\n                         LEFT JOIN `tabSalary Detail` sdd ON ss.name = sdd.parent AND sdd.salary_component = 'NSSF'\nWHERE\tss.start_date >= %(from_date)s\nAND\t    ss.end_date <= %(to_date)s\nAND     ss.docstatus = 1\nGROUP BY IF(e.employment_type != 'Temporary', \"PERM\", \"TEMP\")",
+ "ref_doctype": "Salary Slip",
+ "report_name": "ITX.219.03.E Statement of Tax Withheld",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "Employee"
+  },
+  {
+   "role": "Leave Approver"
+  },
+  {
+   "role": "All"
+  },
+  {
+   "role": "Employee Self Service"
+  }
+ ]
+}

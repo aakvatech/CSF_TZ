@@ -4,7 +4,7 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2020-10-10 02:22:44.095512",
+ "modified": "2021-05-06 12:02:03.838474",
  "modified_by": "Administrator",
  "module": "CSF TZ",
  "name": "jobcards",
@@ -20,6 +20,21 @@
   },
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Cab Line Team Leader"
+  },
+  {
+   "role": "Body Shop Team Leader"
+  },
+  {
+   "role": "Production Team Leader"
+  },
+  {
+   "role": "Production Manager"
+  },
+  {
+   "role": "KD Engineer"
   }
  ],
  "script": null,

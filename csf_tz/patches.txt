@@ -1,1 +1,2 @@
 csf_tz.patches.remove_stock_entry_qty_field
+csf_tz.patches.remove_core_doctype_custom_docperm

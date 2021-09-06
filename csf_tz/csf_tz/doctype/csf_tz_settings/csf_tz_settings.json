@@ -11,7 +11,11 @@
   "column_break_3",
   "auto_pos_for_role",
   "is_manufacture",
-  "allow_delete_in_sql_command"
+  "allow_delete_in_sql_command",
+  "section_break_8",
+  "sle_gle_reposting_start_date",
+  "column_break_10",
+  "start_sle_gle_reporting"
  ],
  "fields": [
   {
@@ -54,12 +58,30 @@
    "fieldname": "allow_delete_in_sql_command",
    "fieldtype": "Check",
    "label": "Allow Delete in SQL Command"
+  },
+  {
+   "fieldname": "sle_gle_reposting_start_date",
+   "fieldtype": "Date",
+   "label": "SLE GLE Reposting Start Date"
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_sle_gle_reporting",
+   "fieldtype": "Button",
+   "label": "Start SLE GLE Reporting"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-06-04 15:16:13.589916",
+ "modified": "2021-06-18 21:46:02.526988",
  "modified_by": "Administrator",
  "module": "CSF TZ",
  "name": "CSF TZ Settings",

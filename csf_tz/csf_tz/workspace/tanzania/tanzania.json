@@ -1,0 +1,180 @@
+{
+ "category": "Domains",
+ "charts": [],
+ "creation": "2021-07-03 11:42:22.359205",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends_another_page": 0,
+ "hide_custom": 1,
+ "icon": "drag",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Tanzania",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NSSF",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NSSF/CON.05",
+   "link_to": "NSSF-CON.05",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "NSSF CON5 - Online Version",
+   "link_to": "NSSF CON5 Monthly Contribution - Online Version",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "TRA - PAYE",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX.219.03.E PAYE Returns (efiling)",
+   "link_to": "ITX.219.03.E Statement of Tax Withheld",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX.215.01.E PAY Half Yearly Returns (Part 1)",
+   "link_to": "ITX 215.01.E - PAYE Withheld Part 1",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX.215.01.E PAY Half Yearly Returns (Part 2)",
+   "link_to": "ITX 215.01.E - PAYE Withheld Part 2",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "TRA - SDL",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX.215.03.E SDL Returns (efiling)",
+   "link_to": "ITX.215.03.E SDL Monthly Returns",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX 220.01.E SDL Half Yearly Certificate",
+   "link_to": "ITX 220.01.E - Employer\u2019s Half Year Certificate",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "TRA - Withholding Tax",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "TRA - VAT",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WCF",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "WCF Monthly Returns",
+   "link_to": "WCF-3",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "HESLB",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "HESLB Return",
+   "link_to": "HESLB Return online",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setting",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payware Settings",
+   "link_to": "Payware Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2021-08-16 18:47:43.657733",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Tanzania",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 0,
+ "shortcuts": []
+}
