@@ -259,6 +259,11 @@ fixtures = [
 # 	'Salary Slip': 'csf_tz.overrides.csftz_SalarySlip'
 # }
 
+# Override Payroll Entry Class
+override_doctype_class = {
+	 'Payroll Entry': 'csf_tz.overrides.csftz_PayrollEntry'
+}
+
 # Includes in <head>
 # ------------------
 
