@@ -8,7 +8,7 @@ frappe.ui.form.on("Payment Entry", {
 		if (frm.is_new()) {
 			if (frm.doc.payment_type == "Receive") {
 				frm.set_value("naming_series", "RE-.YYYY.-");
-				if (frm.doc.party_type != "Student") {
+				if (!["Student", "Donor"].includes(frm.doc.party_type)) {
 					frm.set_value("party_type", "Customer");
 				}
 			}
@@ -33,7 +33,9 @@ frappe.ui.form.on("Payment Entry", {
 				to_posting_date: today,
 				allocate_payment_amount: 1
 			}
-			frm.events.get_outstanding_documents(frm, filters);
+			if (["Customer", "Supplier"].includes(frm.doc.party_type)) {
+				frm.events.get_outstanding_documents(frm, filters);
+			}
 		}
 	},
 

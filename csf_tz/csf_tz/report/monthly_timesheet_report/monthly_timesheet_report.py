@@ -5,6 +5,7 @@ import frappe
 import pandas as pd
 import numpy as np
 from frappe import msgprint, _
+from frappe.utils import data, flt
 
 def execute(filters=None):
 	conditions, filters = get_conditions(filters)
@@ -60,7 +61,7 @@ def execute(filters=None):
 		project_colnames = [key for key in project_details[0].keys()]
 		
 		df_project = pd.DataFrame.from_records(project_details, columns=project_colnames)
-		
+
 		project_pvt = pd.pivot_table(
 			df_project,
 			index=["employee_name"],
@@ -149,7 +150,7 @@ def timesheet_details(conditions, filters):
 					"activity_type": log.activity_type,
 					"from_time": log.from_time,
 					"to_time": log.to_time,
-					"hours_used": log.hours_used,
+					"hours_used": flt(log.hours_used, 1),
 					"task": log.task,
 					"project": log.project
 				}
@@ -172,13 +173,13 @@ def hours_per_day_data(conditions, filters):
 			"employee": record.employee,
 			"employee_name": record.employee_name,
 			"date": record.start_date.strftime("%d-%m-%Y"),
-			"total_hours": record.total_hours,
+			"total_hours": flt(record.total_hours, 1)
 		})
 	return data
 
 
 def hours_per_project_data(conditions, filters):
-	return frappe.db.sql("""
+	project_details = frappe.db.sql("""
 		SELECT ts.employee, 
 			ts.employee_name, 
 			tsd.project,
@@ -189,6 +190,14 @@ def hours_per_project_data(conditions, filters):
 		ORDER BY ts.start_date
 		""".format(conditions=conditions), filters, as_dict=1 
 	)
+	
+	data = []
+	for entry in project_details:
+		entry.update({
+			"hours": flt(entry.hours, 1)
+		})
+		data.append(entry)
+	return data
 
 
 def get_timesheet_logs(conditions, filters):
