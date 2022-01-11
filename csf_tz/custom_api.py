@@ -477,6 +477,8 @@ def create_delivery_note(doc=None, method=None, doc_name=None):
                 _(msgprint), title="Delivery Note Created", indicator="green"
             )
 
+            update_drug_prescription(doc, delivery_doc)
+
 
 def check_item_is_maintain(item_name):
     is_stock_item = frappe.get_value("Item", item_name, "is_stock_item")
@@ -1670,3 +1672,20 @@ def make_withholding_tax_gl_entries_for_sales(doc, method):
             )
         )
         frappe.msgprint(_(si_msgprint))
+
+def update_drug_prescription(doc, delivery_doc):
+    if doc.patient and doc.enabled_auto_create_delivery_notes:
+        for item in doc.items:
+            if item.reference_dt == "Drug Prescription":
+                if delivery_doc.patient and (delivery_doc.form_sales_invoice == item.parent):
+                    for dni in delivery_doc.items:
+                        if (
+                            item.name == dni.si_detail and 
+                            item.item_code == dni.item_code and 
+                            item.parent == dni.against_sales_invoice
+                        ):
+                            frappe.db.set_value("Drug Prescription", item.reference_dn, {
+                                "dn_detail": dni.name,
+                                "sales_invoice_number": dni.against_sales_invoice,
+                                "invoiced": 1
+                            })
