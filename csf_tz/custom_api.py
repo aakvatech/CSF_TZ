@@ -1685,7 +1685,7 @@ def update_drug_prescription(doc, delivery_doc):
                             item.parent == dni.against_sales_invoice
                         ):
                             frappe.db.set_value("Drug Prescription", item.reference_dn, {
-                                "dn_detail": dni.name,
                                 "sales_invoice_number": dni.against_sales_invoice,
+                                "drug_prescription_created": 1,
                                 "invoiced": 1
                             })
