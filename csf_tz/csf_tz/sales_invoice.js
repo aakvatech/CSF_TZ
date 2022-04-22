@@ -6,6 +6,7 @@ frappe.ui.form.on("Sales Invoice", {
     refresh: function (frm) {
         frm.trigger("set_pos");
         frm.trigger("make_sales_invoice_btn");
+        frm.trigger("make_payment_via_journey_entry");
 
     },
     onload: function (frm) {
@@ -102,6 +103,18 @@ frappe.ui.form.on("Sales Invoice", {
             }
         });
     },
+    make_payment_via_journey_entry: (frm) => {
+        if (frm.doc.docstatus == 1) {
+            frm.add_custom_button(__('Journal Entry'), () => {
+                frappe.call('erpnext.accounts.doctype.journal_entry.journal_entry.get_payment_entry_against_invoice', {
+                    dt: frm.doc.doctype, dn: frm.doc.name
+                }).then(data => {
+                    var entry = frappe.model.sync(data.message);
+                    frappe.set_route("Form", entry[0].doctype, entry[0].name);
+                });
+            }, __('Create')).removeClass('btn-default').addClass('btn-primary');
+        }
+    }
 });
 
 frappe.ui.form.on("Sales Invoice Item", {
