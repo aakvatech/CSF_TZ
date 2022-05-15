@@ -1,2 +1,3 @@
 csf_tz.patches.remove_stock_entry_qty_field
 csf_tz.patches.remove_core_doctype_custom_docperm
+csf_tz.patches.add_custom_field_for_purchase_and_sales_invoice
