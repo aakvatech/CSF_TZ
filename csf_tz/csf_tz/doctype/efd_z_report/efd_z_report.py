@@ -104,7 +104,7 @@ class EFDZReport(Document):
                 {
                     "invoice_number": i.name,
                     "invoice_date": i.posting_date,
-                    "amt_excl_vat": flt(i.base_net_total, 2),
+                    "amt_excl_vat": flt((i.base_net_total + i.base_rounding_adjustment), 2),
                     "vat": flt(i.base_total_taxes_and_charges, 2),
                     "amt_ex__sr": amt_ex__sr,
                     "invoice_amount": flt(i.base_rounded_total, 2),
