@@ -8,7 +8,7 @@ import traceback
 import pyqrcode
 import io
 import base64
-from frappe.utils import flt, cint, getdate, get_datetime, nowdate, nowtime
+from frappe.utils import flt, cint, getdate, get_datetime, nowdate, nowtime, add_days
 from frappe.model.mapper import get_mapped_doc
 from frappe.desk.form.linked_with import get_linked_docs, get_linked_doctypes
 from erpnext.stock.utils import get_stock_balance, get_latest_stock_qty
@@ -1710,3 +1710,28 @@ def validate_payroll_entry_field(payroll_entry):
     payroll_entry = frappe.get_doc("Payroll Entry", payroll_entry)
     if payroll_entry.docstatus != 1:
         return False
+
+
+def auto_closing_delivery_note():
+    """
+    Mark delivery note closed per customer depending on the days specified on customer
+    This routine will run every day 3:30am at night
+    """
+
+    dn_list = []
+
+    customer_details = frappe.get_all("Customer", filters={"csf_tz_is_auto_close_dn": 1}, fields=["name", "csf_tz_dn_closed_after"])
+
+    for customer in customer_details:
+        filters = {
+            "docstatus": 1,
+            "customer": customer.name,
+            "status": ["!=", "Closed"],
+            "posting_date": ["<", add_days(nowdate(), days=(-1 * customer.hms_tz_dn_closed_after))],
+        }
+        dn_list += frappe.get_all("Delivery Note", filters=filters, fields=["name"], pluck="name")
+
+    for dn in dn_list:
+        frappe.db.set_value("Delivery Note", dn, "status", "Closed")
+
+        frappe.db.commit() 

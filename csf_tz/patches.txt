@@ -1,3 +1,4 @@
 csf_tz.patches.remove_stock_entry_qty_field
 csf_tz.patches.remove_core_doctype_custom_docperm
 csf_tz.patches.add_custom_fields_for_sales_invoice_item_and_purchase_invoice_item
+csf_tz.patches.add_custom_fields_on_customer_for_auto_closing_delivery_note
