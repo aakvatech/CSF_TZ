@@ -1774,7 +1774,7 @@ def batch_splitting(doc, method):
     if not frappe.db.get_single_value('CSF TZ Settings', "allow_batch_splitting"):
         return
 
-    if not doc.set_warehouse:
+    if not doc.set_warehouse and doc.update_stock == 1:
         frappe.throw(_("<h4>Please set source warehouse first</h4>"))
         
     warehouse = doc.set_warehouse
@@ -1818,16 +1818,23 @@ def get_item_duplicates(order_doc):
     return single_items, duplicated_items
 
 
-def get_batch_per_item(item_code, warehouse):
+def get_batch_per_item(item_code, warehouse, update_stock=None):
     """"fetch batch details for item code and warehouse"""
+    
+    conditions = ""
+    if update_stock:
+        conditions = "sle.item_code = '%s' and sle.is_cancelled = 0 and sle.batch_no != "" and sle.warehouse = '%s' "%(item_code, warehouse)
+    else:
+        conditions = "sle.item_code = '%s' and sle.is_cancelled = 0 and sle.batch_no != '' "%(item_code)
+    
     batch_records = frappe.db.sql("""
         select sle.batch_no, sle.warehouse, sum(sle.actual_qty) as qty, ba.stock_uom, ba.expiry_date
         from `tabStock Ledger Entry` sle 
         inner join `tabBatch` ba on sle.batch_no = ba.batch_id
-        where sle.item_code = '%s' and sle.is_cancelled = 0 and sle.batch_no != "" and sle.warehouse = '%s'
+        where {conditions}
         group by sle.batch_no, sle.warehouse
         order by ba.expiry_date
-        """%(item_code, warehouse), as_dict=True
+        """.format(conditions = conditions), as_dict=True
     )
     return batch_records
     
@@ -1840,7 +1847,7 @@ def allocate_batches_for_single_items(doc, items, warehouse, sales_order, fields
 
     for row in items:
         b_qty = 0
-        batches = get_batch_per_item(row.item_code, warehouse)
+        batches = get_batch_per_item(row.item_code, warehouse, doc.update_stock)
 
         if batches:
             for batch_obj in batches:
@@ -1891,7 +1898,7 @@ def allocate_batch_for_duplicate_items(doc, duplicated_items, warehouse, sales_o
     unique_names = unique([d.item_code for d in duplicated_items ])
     
     for item_code in unique_names:
-        batches = get_batch_per_item(item_code, warehouse)
+        batches = get_batch_per_item(item_code, warehouse, doc.update_stock)
 
         if batches:
             batch_used = []
