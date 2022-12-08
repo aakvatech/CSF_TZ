@@ -1774,17 +1774,17 @@ def batch_splitting(doc, method):
     if not frappe.db.get_single_value('CSF TZ Settings', "allow_batch_splitting"):
         return
 
-    if not doc.set_warehouse:
-        frappe.throw(_("<h4>Please set source warehouse first</h4>"))
-        
-    warehouse = doc.set_warehouse
-
     order_doc = None
     if doc.items[0].sales_order:
         order_doc = frappe.get_doc("Sales Order", doc.items[0].sales_order)
     
     if not order_doc:
         return
+    
+    if not doc.set_warehouse:
+        frappe.throw(_("<h4>Please set source warehouse first</h4>"))
+        
+    warehouse = doc.set_warehouse
 
     fields_to_clear = ["name", "owner", "creation", "modified", "modified_by", "docstatus", "parentfield", "parenttype", "parent", "doctype"]
 
