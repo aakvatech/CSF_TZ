@@ -1,3 +1,4 @@
+csf_tz.patches.custom_fields.custom_fields_for_removed_edu_fields_in_csf_tz
 csf_tz.patches.remove_stock_entry_qty_field
 csf_tz.patches.remove_core_doctype_custom_docperm
 csf_tz.patches.add_custom_fields_for_sales_invoice_item_and_purchase_invoice_item
