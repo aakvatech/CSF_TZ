@@ -1,0 +1,64 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2023-08-14 13:19:48.358998",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "mandatory": 1,
+   "options": "Account",
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "fiscal_year",
+   "fieldtype": "Link",
+   "label": "Fiscal Year",
+   "mandatory": 1,
+   "options": "Fiscal Year",
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "mandatory": 1,
+   "options": "Company",
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Cost Center",
+   "mandatory": 1,
+   "options": "Cost Center",
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "",
+ "modified": "2023-08-14 13:19:48.358998",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Get Actual Expense for Budget",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "select gle.voucher_type AS \"voucher_type:Link/DocType:\", gle.voucher_no AS \"Voucher:Dynamic Link/voucher_type:\",\r\n    gle.debit - gle.credit AS \"Amount:Currency:150\", gle.cost_center AS \"Cost Center::\", gle.account AS \"Account::\",\r\n    gle.posting_date AS \"Transaction Date:Date:150\", gle.fiscal_year AS \"Fiscal Year::\"\r\nfrom `tabGL Entry` gle\r\n    where is_cancelled = 0\r\n        and gle.account = %(account)s\r\n        and gle.fiscal_year = %(fiscal_year)s\r\n        and gle.company = %(company)s\r\n        and gle.docstatus = 1 \r\n        and exists (select tc.name from`tabCost Center` tc\r\n                    INNER JOIN `tabCost Center` tca\r\n                    where tca.name = %(cost_center)s\r\n                    AND tc.lft >= tca.lft and tc.rgt <= tca.rgt\r\n                    and tc.name = gle.cost_center)\r\n",
+ "ref_doctype": "Budget",
+ "report_name": "Get Actual Expense for Budget",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

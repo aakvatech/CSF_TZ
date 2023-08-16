@@ -1,0 +1,105 @@
+<p class="text-right text-muted">Printed On {%= frappe.datetime.str_to_user(frappe.datetime.get_datetime_as_string()) %}</p>
+
+{% var supplierName = []; %}
+{% var total_by_supplier = {}; %}
+
+	{%  for (var i = 0, l = data.length; i < l; i++) { %}
+	{%  var supplier_name = data[i]['supplier_name']; %}
+	{%  if (!supplierName.includes(supplier_name) && supplier_name != "") { %}
+			{% supplierName.push(supplier_name); %}
+	{% } %}
+{% } %}
+<h2 style="text-align: center;">COMPARISSION SHEET</h2>
+<table style="border: 1px solid black; width: 100%;">
+	<thead>
+	  <tr>
+		<th>Item Code</th>
+		{% for (var i = 0, l = supplierName.length; i < l; i++) { %}
+		   <th colspan="3">{{ supplierName[i] }}</th>
+		{% } %}
+	  </tr>
+	  <tr>
+		<th></th>
+		{% for (var k = 0, l = supplierName.length; k < l; k++) { %}
+		  <th>Qty</th>
+		  <th>UOM</th>
+		  <th>Price</th>
+		{% } %}
+	  </tr>
+	</thead>
+	<tbody>
+	  {% for (var z = 0, x = data.length; z < x; z++) { %}
+	    <tr style="border: 1px solid black;">
+		    <td>{{ data[z]['item_code'] }}</td>	
+			
+			{% if (supplierName.includes(data[z]['supplier_name'])) { %}
+				{% var index = supplierName.indexOf(data[z]['supplier_name']); %}
+				{% var supplier_name = data[z]['supplier_name']; %}
+
+				{%	if (total_by_supplier.hasOwnProperty(supplier_name)) {  %}
+				    {% total_by_supplier[supplier_name] +=  data[z]['price'];  %}
+				{%	} else {  %}
+				    {% total_by_supplier[supplier_name] =  data[z]['price'];  %}
+				{%	}  %}
+
+					{% for (var m = 0; m < index; m++) { %}
+						<td style="border: 1px solid black;"></td>
+						<td style="border: 1px solid black;"></td>
+						<td style="border: 1px solid black;"></td>
+					{% } %}
+
+					<td style="border: 1px solid black;">{{ data[z]['qty'] }}</td>
+					<td style="border: 1px solid black;">{{ data[z]['uom'] }}</td>
+					<td style="border: 1px solid black;">{{ data[z]['price'] }}</td>
+
+					{% for (var m = index + 1; m < supplierName.length; m++) { %}
+						<td style="border: 1px solid black;"></td>
+						<td style="border: 1px solid black;"></td>
+						<td style="border: 1px solid black;"></td>
+					{% } %}
+
+			{% } else { %}
+			   {% var index = supplierName.indexOf(supplier_name); %}
+			   {%	if (total_by_supplier.hasOwnProperty(supplier_name)) {  %}
+			   {% total_by_supplier[supplier_name] +=  data[z]['price'];  %}
+			   {%	}   %}
+			    
+			   {% for (var m = 0; m < index; m++) { %}
+					<td style="border: 1px solid black;"></td>
+					<td style="border: 1px solid black;"></td>
+					<td style="border: 1px solid black;"></td>
+				{% } %}
+
+				<td style="border: 1px solid black;">{{ data[z]['qty'] }}</td>
+				<td style="border: 1px solid black;">{{ data[z]['uom'] }}</td>
+				<td style="border: 1px solid black;">{{ data[z]['price'] }}</td>
+
+				{% for (var m = index + 1; m < supplierName.length; m++) { %}
+					<td style="border: 1px solid black;"></td>
+					<td style="border: 1px solid black;"></td>
+					<td style="border: 1px solid black;"></td>
+				{% } %}
+			{% } %}		
+		</tr>
+	  {% } %}
+	  <tr>
+		<td style="border: 1px solid black;">TOTAL</td>
+			{% for (var m = 0; m < supplierName.length; m++) { %}
+					<td colspan="3" style="border: 1px solid black; text-align: right;">{{ total_by_supplier[supplierName[m]] }}</td>
+			{% } %}
+	  </tr>		
+	  <tr>
+		<td style="border: 1px solid black;">VAT 18%</td>
+			{% for (var m = 0; m < supplierName.length; m++) { %}
+					<td colspan="3" style="border: 1px solid black; text-align: right;">{{ total_by_supplier[supplierName[m]] * 0.18 }}</td>
+			{% } %}
+	  </tr>	
+	  <tr>
+		<td style="border: 1px solid black;">GRAND TOTAL</td>
+			{% for (var m = 0; m < supplierName.length; m++) { %}
+					<td colspan="3" style="border: 1px solid black; text-align: right;">{{ total_by_supplier[supplierName[m]] + (total_by_supplier[supplierName[m]] * 0.18) }}</td>
+			{% } %}
+	  </tr>	
+	</tbody>
+  </table>
+
