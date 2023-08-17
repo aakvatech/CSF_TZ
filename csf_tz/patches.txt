@@ -8,3 +8,4 @@ csf_tz.patches.custom_fields.auth_otp_custom_fields
 csf_tz.patches.custom_fields.add_custom_fields_for_authotp_validated_in_sales_invoice
 csf_tz.patches.custom_fields.payroll_approval_custom_fields
 csf_tz.patches.custom_fields.attendance_overtime_calculation_custom_fields
+csf_tz.patches.custom_fields.vfd_with_no_copy_checked_custom_fields 
