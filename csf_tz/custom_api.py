@@ -2122,3 +2122,66 @@ def validate_grand_total(doc, method):
                 Total Amount for all Items: <strong>{total_amount}</strong> must be equal to Paid Amount: <strong>{payment_amount}</strong>,<br>\
                 Please check before submitting this invoice </h4>")
             )
+
+@frappe.whitelist()
+def auto_create_account():
+    abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
+    account_data = [
+        {"account_name": "OUTPUT VAT - 18% ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},
+        {"account_name": "INPUT VAT - 18%  ", "account_type": "Tax", "parent_account": f"Tax Assets - {abbr}"},
+        {"account_name": "VAT Payable Account ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},
+        {"account_name": "Basic Salary - Expense", "account_type": "Expense Account", "parent_account": f"Direct Expenses - {abbr}"},
+        {"account_name": "Allowance - Expense", "account_type": "Expense Account", "parent_account": f"Direct Expenses - {abbr}"},
+        {"account_name": "Deductions - Expenses", "account_type": "Expense Account", "parent_account": f"Direct Expenses - {abbr}"},
+        {"account_name": "Taxes - Expenses", "account_type": "Expense Account", "parent_account": f"Direct Expenses - {abbr}"},        
+    ]
+
+    for account_info in account_data:
+        account_name = account_info.get("account_name")
+
+        if not account_exists(account_name):
+            account_doc = frappe.new_doc("Account")
+            account_doc.account_name = account_name
+            account_doc.account_type = account_info.get("account_type")
+            account_doc.parent_account = account_info.get("parent_account")
+            account_doc.insert(ignore_permissions=True)
+        else:   
+            frappe.msgprint(f"Account '{account_name}' already exists.")
+    return "Account added successfully."
+
+@frappe.whitelist()
+def create_tax_template():
+    abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
+    item_tax_template_list = [
+        {"title": "Tanzania Exempted Sales", "tax_type": f"OUTPUT VAT - 18% - {abbr}"},
+        {"title": "Tanzania Exempted Purchases ", "tax_type": f"INPUT VAT - 18% - {abbr}"},
+        {"title": "Tanzania VAT 18%", "tax_type": f"OUTPUT VAT - 18% - {abbr}"},
+        {"title": "Tanzania Purchase VAT 18% ", "tax_type": f"INPUT VAT - 18% - {abbr}"},
+        {"title": "Zanzibar VAT Exempted", "tax_type": f"VAT Payable Account - {abbr}"},
+        {"title": "Zanzibar VAT Tax 0%", "tax_type": f"VAT Payable Account - {abbr}"},
+    ]
+
+    for item_tax_template_info in item_tax_template_list:
+        item_tax_template_doc = frappe.new_doc('Item Tax Template')
+        item_tax_template_doc.title = item_tax_template_info.get('title')
+        item_tax_template_doc.append("taxes", {
+            "tax_type": item_tax_template_info.get('tax_type'),
+            "tax_rate": ""
+        })
+        item_tax_template_doc.insert()
+
+    return "Tax Template added successfully."
+
+
+@frappe.whitelist()
+def create_tax_category():
+    tax_category_list = ['Taxable Sales', 'Non Taxable', 'Purchase']
+
+    for tax_category_name in tax_category_list:
+        tax_category_doc = frappe.new_doc('Tax Category')
+        tax_category_doc.name = tax_category_name
+        tax_category_doc.title = tax_category_name
+        tax_category_doc.insert(ignore_permissions=True)
+        tax_category_doc.save()
+            
+    return "Tax Template added to Supplier Groups successfully." 
