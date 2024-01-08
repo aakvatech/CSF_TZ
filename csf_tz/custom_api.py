@@ -2098,7 +2098,7 @@ def create_tax_template():
 
 @frappe.whitelist()
 def create_tax_category():
-    tax_category_list = ['Taxable Sales', 'Non Taxable', 'Purchase']
+    tax_category_list = ['Sales', 'Purchase']
 
     for tax_category_name in tax_category_list:
         tax_category_doc = frappe.new_doc('Tax Category')
