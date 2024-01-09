@@ -8,7 +8,8 @@ def execute():
                 fieldname= "tax_category",
                 fieldtype="Link",
                 label="Tax Category",
-                options= "Tax Category"
+                options= "Tax Category",
+                default="Purchase"
             ),
         ],
           "Supplier Group":[
@@ -16,20 +17,11 @@ def execute():
                 fieldname= "tax_category",
                 fieldtype="Link",
                 label="Tax Category",
-                options= "Tax Category"
+                options= "Tax Category",
+                default="Sales"
             ),
         ],
         
 
     }
     create_custom_fields(fields, update=True)
-    tax_categories = ['Sales', 'Purchase']
-    for tax_category in tax_categories:
-        if 'Sales' in tax_category:
-            supplier_group_lists = frappe.get_all('Supplier Group')
-            for supplier_group in supplier_group_lists:
-                frappe.db.set_value('Supplier Group', supplier_group.name, 'tax_category', tax_category)
-        elif 'Purchase' in tax_category:
-            customer_group_lists = frappe.get_all('Customer Group')
-            for customer_group in customer_group_lists:
-                frappe.db.set_value('Customer Group', customer_group.name, 'tax_category', tax_category) 
