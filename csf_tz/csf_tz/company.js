@@ -35,19 +35,52 @@ frappe.ui.form.on("Company", {
 				}
 			};
         });
+		
 	},
 
     
 	refresh: function(frm) {
 		frm.add_custom_button(__('Auto create accounts'), function() {
 			frm.trigger("auto_create_account");
-		}, __("CSF_Tz"));
+		}, __("Setup"));
 		frm.add_custom_button(__('create Item Tax Template'), function() {
 			frm.trigger("create_tax_template");
-		}, __("CSF_Tz"));
+		}, __("Setup"));
 		frm.add_custom_button(__('Create Tax Category'), function() {
 			frm.trigger("make_tax_category");
-		}, __("CSF_Tz"));
+		}, __("Setup"));
+		frm.add_custom_button(__('Linking Tax Template'), function () {
+			let d = new frappe.ui.Dialog({
+				title: 'Automation',
+				fields: [
+					{
+						label: 'Item Tax Template',
+						fieldname: 'item_tax_template',
+						fieldtype: 'Link',
+						options: 'Item Tax Template',
+						// Add other field properties as needed
+					},
+				],
+				primary_action_label: 'Submit',
+				primary_action: function (values) {
+					frappe.call({
+						method: "csf_tz.custom_api.linking_tax_template",
+						args: {
+							item_tax_template: values.item_tax_template
+						},
+						freeze: true,
+						callback: function (r) {
+							frappe.msgprint(__("Linking Tax Template and Tax Category."));
+							frm.reload_doc();
+						}
+					});
+					d.hide();
+				}
+			});
+			d.show();
+		}, __("Setup"));
+		
+	
 	},
 
 	auto_create_account: function(frm) {

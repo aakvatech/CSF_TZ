@@ -2059,6 +2059,22 @@ def auto_create_account():
     abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
     company = frappe.defaults.get_user_default("company")
     account = [
+        {"account_name": "Payroll Payable ", "is_group": 1, "parent_account": f"Current Liabilities - {abbr}"},
+        {"account_name": "NSSF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "NHIF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "PAYE Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "SDL Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "WCF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "HESLB Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        
+        
+        {"account_name": "Salaries and Wages ", "is_group": 1, "parent_account": f"Indirect Expenses - {abbr}"},
+        {"account_name": "Salary", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "NSSF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "NHIF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "SDL Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "WCF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        
         {"account_name": "OUTPUT VAT - 18% ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},
         {"account_name": "INPUT VAT - 18%  ", "account_type": "Tax", "parent_account": f"Tax Assets - {abbr}"},
         {"account_name": "VAT Payable Account ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},        
@@ -2108,3 +2124,34 @@ def create_tax_category():
         tax_category_doc.save()
             
     return "Tax Template added to Supplier Groups successfully."  
+
+@frappe.whitelist()
+def linking_tax_template(item_tax_template):
+    abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
+    item_list = frappe.get_all('Item', filters={"default_tax_template": item_tax_template})
+
+    for item in item_list:
+        item_doc = frappe.get_doc("Item", item.name, fields=['default_tax_template'])
+        if item_doc.default_tax_template == f"Tanzania VAT 18% - {abbr}":
+            item_doc.taxes = []
+
+            item_doc.append("taxes", {
+                "item_tax_template": f"Tanzania VAT 18% - {abbr}",
+                "tax_category": "Sales"
+            })
+            item_doc.append("taxes", {
+                "item_tax_template": f"Tanzania Purchase VAT 18%  - {abbr}",
+                "tax_category": "Purchase"
+            })
+        elif item_doc.default_tax_template == f"Tanzania Exempted Sales - {abbr}":
+            item_doc.taxes = []
+
+            item_doc.append("taxes", {
+                "item_tax_template": f"Tanzania Exempted Sales - {abbr}",
+                "tax_category": "Sales"
+            })
+            item_doc.append("taxes", {
+                "item_tax_template": f"Tanzania Exempted Purchases  - {abbr}",
+                "tax_category": "Purchase"
+            })
+        item_doc.save()
