@@ -79,6 +79,9 @@ frappe.ui.form.on("Company", {
 			});
 			d.show();
 		}, __("Setup"));
+		frm.add_custom_button(__('Create Salary Components'), function() {
+			frm.trigger("make_salary_components");
+		}, __("Setup"));
 		
 	
 	},
@@ -110,6 +113,17 @@ frappe.ui.form.on("Company", {
 			callback: function(response) {
 				if (response.message) {
 					frappe.msgprint(__('Tax Category created successfully.'));
+				}
+			}
+		})
+	},
+	
+	make_salary_components: function(frm) {
+		frappe.call({
+			method: 'csf_tz.custom_api.make_salary_components',
+			callback: function(response) {
+				if (response.message) {
+					frappe.msgprint(__('Salary Components created successfully.'));
 				}
 			}
 		})

@@ -2058,32 +2058,33 @@ def validate_grand_total(doc, method):
 def auto_create_account():
     abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
     company = frappe.defaults.get_user_default("company")
-    account = [
+    account_list = [
         {"account_name": "Payroll Payable ", "is_group": 1, "parent_account": f"Current Liabilities - {abbr}"},
-        {"account_name": "NSSF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
-        {"account_name": "NHIF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
-        {"account_name": "PAYE Payable ", "parent_account": f"Payroll Payable - {abbr}"},
-        {"account_name": "SDL Payable ", "parent_account": f"Payroll Payable - {abbr}"},
-        {"account_name": "WCF Payable ", "parent_account": f"Payroll Payable - {abbr}"},
-        {"account_name": "HESLB Payable ", "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "NSSF Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "NHIF Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "PAYE Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "SDL Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "WCF Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
+        {"account_name": "HESLB Payable ","is_group": 0, "parent_account": f"Payroll Payable - {abbr}"},
         
         
         {"account_name": "Salaries and Wages ", "is_group": 1, "parent_account": f"Indirect Expenses - {abbr}"},
-        {"account_name": "Salary", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
-        {"account_name": "NSSF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
-        {"account_name": "NHIF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
-        {"account_name": "SDL Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
-        {"account_name": "WCF Expense", "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "Salary Expense", "is_group": 0, "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "NSSF Expense", "is_group": 0, "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "NHIF Expense", "is_group": 0, "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "SDL Expense", "is_group": 0, "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
+        {"account_name": "WCF Expense", "is_group": 0, "account_type": "Expense Account", "parent_account": f"Salaries and Wages - {abbr}"},
         
-        {"account_name": "OUTPUT VAT - 18% ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},
+        {"account_name": "OUTPUT VAT - 18% ", "account_type": "Tax", "parent_account":  f"Duties and Taxes - {abbr}"},
         {"account_name": "INPUT VAT - 18%  ", "account_type": "Tax", "parent_account": f"Tax Assets - {abbr}"},
         {"account_name": "VAT Payable Account ", "account_type": "Tax", "parent_account": f"Duties and Taxes - {abbr}"},        
     ]
-    for account_list in account:        
+    for account in account_list:
         account_doc = frappe.new_doc("Account")
-        account_doc.account_name = account_list.get("account_name")
-        account_doc.account_type = account_list.get("account_type")
-        account_doc.parent_account = account_list.get("parent_account")
+        account_doc.account_name = account.get("account_name")
+        account_doc.is_group = account.get("is_group")
+        account_doc.account_type = account.get("account_type")
+        account_doc.parent_account = account.get("parent_account")
         account_doc.insert(ignore_permissions=True)
 
     return "Company added successfully."
@@ -2155,3 +2156,34 @@ def linking_tax_template(item_tax_template):
                 "tax_category": "Purchase"
             })
         item_doc.save()
+
+
+@frappe.whitelist()
+def make_salary_components():
+    abbr = frappe.get_value('Company', frappe.defaults.get_user_default("company"), 'abbr')
+
+    salary_components_mapping = {
+        # "NSSF Employer": "NSSF Payable",
+        "NSSF Expense": "NSSF Expense",
+        # "NSSF Payable": "NSSF Payable",
+        # "NHIF Employer": "NHIF Payable",
+        "NHIF Expense": "NHIF Expense",
+        # "NHIF Payable": "NHIF Payable",
+        "WCF Expense": "WCF Expense",
+        # "WCF Payable": "WCF Payable",
+        "SDL Expense": "SDL Expense",
+        # "SDL Payable": "SDL Payable",
+        "PAYE Payable": "PAYE Payable",
+        "HESLB Payable": "HESLB Payable",
+    }
+
+    for component, account in salary_components_mapping.items():
+        # frappe.throw(str(account))
+        salary_component_doc = frappe.new_doc('Salary Component')
+        salary_component_doc.salary_component = component
+        salary_component_doc.append("accounts", {
+            "account": f"{account} - {abbr}"
+        })
+        salary_component_doc.insert()
+
+    return "Salary Components created successfully."
