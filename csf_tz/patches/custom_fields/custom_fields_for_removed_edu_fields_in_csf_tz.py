@@ -238,16 +238,6 @@ def execute():
                 "label": "Dependent",
             },
         ],
-        "Custom Field":[
-            {
-                "fetch_from": "",
-                "fieldname": "module_def",
-                "fieldtype": "Link",
-                "insert_after": "",
-                "label": "Module Def",
-                "options": "Module Def"
-            },
-        ],
         "Customer":[
             {
                 "bold": 1,
@@ -362,7 +352,6 @@ def execute():
                 "insert_after": "payment_order",
                 "fieldtype": "Link",
                 "options": "DocType",
-                "module_def": "CSF TZ"
             },
             {
                 "owner": "Administrator",
@@ -371,7 +360,6 @@ def execute():
                 "insert_after": "referance_doctype",
                 "fieldtype": "Dynamic Link",
                 "options": "referance_doctype",
-                "module_def": "CSF TZ"
             },
         ],
         "Landed Cost Voucher":[
@@ -464,16 +452,6 @@ def execute():
                 "fieldtype": "Check",
                 "insert_after": "allow_print_for_cancelled",
                 "label": "Print taxes with zero amount",
-            },
-        ],
-        "Property Setter":[
-            {
-                "fetch_from": "",
-                "fieldname": "module_def",
-                "fieldtype": "Link",
-                "insert_after": "",
-                "label": "Module Def",
-                "options": "Module Def"
             },
         ],
         "Purchase Invoice":[
@@ -886,7 +864,6 @@ def execute():
         ],
         "Vehicle":[
             {
-                "module_def": "CSF TZ",
                 "label": "Acquisition Odometer",
                 "fieldname": "csf_tz_acquisition_odometer",
                 "insert_after": "acquisition_date",
@@ -894,14 +871,12 @@ def execute():
             },
             {
                 "owner": "Administrator",
-                "module_def": "CSF TZ",
                 "label": "Manufacturing Year",
                 "fieldname": "csf_tz_year",
                 "insert_after": "model",
                 "fieldtype": "Int",
             },
             {
-                "module_def": "CSF TZ",
                 "label": "Engine Number",
                 "fieldname": "csf_tz_engine_number",
                 "insert_after": "chassis_no",
