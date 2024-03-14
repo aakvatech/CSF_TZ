@@ -11,8 +11,7 @@ from frappe.utils import get_host_name, flt
 from time import sleep
 import binascii
 import os
-from werkzeug.urls import url_fix
-import urllib.parse as urlparse
+from urllib.parse import quote, urlparse, urlunparse
 from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
 from frappe.utils.background_jobs import enqueue
 from datetime import datetime
@@ -167,7 +166,7 @@ def invoice_submission(doc=None, method=None, fees_name=None):
 @frappe.whitelist(allow_guest=True)
 def receive_callback(*args, **kwargs):
     r = frappe.request
-    uri = url_fix(r.url.replace("+", " "))
+    url = url_fix(r.url.replace("+", " "))
     # http_method = r.method
     body = r.get_data()
     # headers = r.headers
@@ -181,7 +180,7 @@ def receive_callback(*args, **kwargs):
                 message[atr] = getattr(msgs, atr)
     else:
         frappe.throw("This has no body!")
-    parsed_url = urlparse.urlparse(uri)
+    parsed_url = urlparse(url)
     message["fees_token"] = parsed_url[4][6:]
     message["doctype"] = "NMB Callback"
     nmb_doc = frappe.get_doc(message)
@@ -457,3 +456,44 @@ def get_fees_default_accounts(company):
 def make_payment_entry_from_call(docname):
     nmb_doc = frappe.get_doc("NMB Callback", docname)
     make_payment_entry(method="frontend", kwargs=nmb_doc)
+
+
+@frappe.whitelist()
+def url_fix(url: str, charset: str = "utf-8") -> str:
+    """Fixes the URL by encoding the non-ASCII characters.
+
+    Args:
+        url (str): The URL to fix.
+        charset (str, optional): The charset to use. Defaults to "utf-8".
+
+    Examples:
+        >>> url_fix("http://example.com/äöüß")
+        'http://example.com/%C3%A4%C3%B6%C3%BC%C3%9F'
+
+        >>> url_fix("http://example.com/漢字")
+        'http://example.com/%E6%BC%A2%E5%AD%97'
+
+        >>> url_fix("http://example.com/|pipe")
+        'http://example.com/%7Cpipe'
+
+        >>> url_fix("http://example.com/page#fragment with space")
+        'http://example.com/page%23fragment%20with%20space'
+
+        >>> url_fix("http://example.com/{curly})
+        'http://example.com/%7Bcurly%7D'
+
+        >>> url_fix("http://example.com/[square])
+        'http://example.com/%5Bsquare%5D'
+
+    """
+    s = url.replace("\\", "/")
+
+    if s.startswith("file://") and s[7:8].isalpha() and s[8:10] in (":/", "|/"):
+        s = f"file:///{s[7:]}"
+
+    url = urlparse(s)
+    path = quote(url.path, safe="/%+$!*'(),")
+    qs = quote(url.query, safe=":&%=+$!*'(),")
+    anchor = quote(url.fragment, safe=":&%=+$!*'(),")
+    return urlunparse((url.scheme, url.netloc, path, qs, "", anchor))
+
