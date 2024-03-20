@@ -24,15 +24,6 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 0,
-   "label": "NSSF/CON.05",
-   "link_to": "NSSF-CON.05",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
    "is_query_report": 1,
    "label": "NSSF CON5 - Online Version",
    "link_to": "NSSF CON5 Monthly Contribution - Online Version",
@@ -59,24 +50,6 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 1,
-   "label": "ITX.215.01.E PAY Half Yearly Returns (Part 1)",
-   "link_to": "ITX 215.01.E - PAYE Withheld Part 1",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "ITX.215.01.E PAY Half Yearly Returns (Part 2)",
-   "link_to": "ITX 215.01.E - PAYE Withheld Part 2",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
    "is_query_report": 0,
    "label": "TRA - SDL",
    "link_type": "DocType",
@@ -94,20 +67,20 @@
   },
   {
    "hidden": 0,
-   "is_query_report": 1,
-   "label": "ITX 220.01.E SDL Half Yearly Certificate",
-   "link_to": "ITX 220.01.E - Employer\u2019s Half Year Certificate",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
    "is_query_report": 0,
    "label": "TRA - Withholding Tax",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "ITX 230.01.E – Withholding Tax Statement",
+   "link_to": "ITX 230.01.E – Withholding Tax Statement",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   },
   {
    "hidden": 0,
@@ -120,16 +93,26 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "WCF",
-   "link_type": "DocType",
+   "label": "VAT eFiling Returns",
+   "link_to": "VAT eFiling Returns",
+   "link_type": "Report",
    "onboard": 0,
-   "type": "Card Break"
+   "type": "Link"
   },
   {
    "hidden": 0,
-   "is_query_report": 1,
-   "label": "WCF Monthly Returns",
-   "link_to": "WCF-3",
+   "is_query_report": 0,
+   "label": "TRA Input VAT Returns eFiling",
+   "link_to": "TRA Input VAT Returns eFiling",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Output VAT Reconciliation",
+   "link_to": "Output VAT Reconciliation",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -158,24 +141,6 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Payware Settings",
-   "link_to": "Payware Settings",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "AV Customization",
-   "link_to": "AV Customization",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
   },
   {
    "hidden": 0,
@@ -219,15 +184,6 @@
    "label": "Work Order Consignment",
    "link_to": "Work Order Consignment",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Ordered vs Received",
-   "link_to": "Ordered vs Received",
-   "link_type": "Report",
    "onboard": 0,
    "type": "Link"
   },
@@ -361,33 +317,6 @@
    "label": "Piecework Salary Disbursement",
    "link_to": "Piecework Salary Disbursement",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Piecework Net Pay",
-   "link_to": "Piecework Net Pay",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Piecework Payment",
-   "link_to": "Piecework Payment",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Piecework by Employee",
-   "link_to": "Piecework by Employee",
-   "link_type": "Report",
    "onboard": 0,
    "type": "Link"
   },

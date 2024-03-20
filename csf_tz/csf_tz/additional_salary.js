@@ -1,7 +1,13 @@
 frappe.ui.form.on('Additional Salary', {
 	refresh: function(frm) {
 		cur_frm.add_custom_button(__("Generate Additional Salary Records"), function() {
-			generate_additional_salary_records();
+			frappe.call({
+				method: "csf_tz.csftz_hooks.additional_salary.generate_additional_salary_records",
+				args: {},
+				callback: function () {
+					cur_frm.reload_doc();
+				}
+			});
 		});
 	},
 	payroll_date: function(frm) {
@@ -23,7 +29,7 @@ frappe.ui.form.on('Additional Salary', {
 	no_of_hours: function(frm) {
 		if (frm.doc.employee && frm.doc.payroll_date) {
 			frappe.call({
-				method: "payware.payware.utils.get_employee_base_salary_in_hours",
+				method: "csf_tz.csftz_hooks.additional_salary.get_employee_base_salary_in_hours",
 				args: {
 					employee: frm.doc.employee,
 					payroll_date: frm.doc.payroll_date
@@ -39,12 +45,3 @@ frappe.ui.form.on('Additional Salary', {
 		}
 	},
 });
-var generate_additional_salary_records = function(){
-	frappe.call({
-		method: "payware.payware.utils.generate_additional_salary_records",
-		args: {},
-		callback: function(){
-			cur_frm.reload_doc();
-		}
-	});
-};

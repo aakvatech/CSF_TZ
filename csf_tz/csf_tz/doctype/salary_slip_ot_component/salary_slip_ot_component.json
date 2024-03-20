@@ -1,0 +1,41 @@
+{
+ "actions": [],
+ "autoname": "SSOTC.#####",
+ "creation": "2019-02-18 09:46:16.715714",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "salary_component",
+  "no_of_hours"
+ ],
+ "fields": [
+  {
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "no_of_hours",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "No of Hours"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-27 14:58:11.001056",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Salary Slip OT Component",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
