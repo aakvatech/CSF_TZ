@@ -1,0 +1,33 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2020-03-04 10:07:04.122150",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2023-12-20 18:01:54.064621",
+ "modified_by": "Administrator",
+ "module": "CSF TZ",
+ "name": "Bank Report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\tdate_format(ss.start_date, '%%M %%Y') AS \"Month::140\",\n\t\tss.employee\t\tAS \"Employee ID::120\", \n\t\tss.employee_name\tAS \"Employee Name::200\", \n\t\tss.bank_account_no\tAS \"Account No.::120\", \n\t\temp.bank_code\t\tAS \"Bank Code.::120\", \n\t\tss.net_pay\t\tAS \"Net Pay:Currency:120\",\n\t\tconcat(cmp.abbr, '/', date_format(ss.start_date, '%%M %%Y/%%d')) AS \"Payroll Entry::140\",\n\t\tpe.cheque_number\tAS \"Cheque No.::120\", \n\t\tpe.cheque_date\t\tAS \"Cheque Date::120\", \n\t\tss.company\t\tAS \"Company::120\",\n\t\tb.bank          AS \"Bank Name::120\",\n\t\tb.branch_code   AS \"Branch::120\",\n\t\tadr.address_line1 AS \"Address1::120\",\n\t\tadr.city AS \"City::120\",\n\t\tadr.country AS \"Country::120\"\nFROM \t`tabSalary Slip` ss\n\tLEFT JOIN `tabEmployee` emp ON ss.employee = emp.name\n\tLEFT JOIN `tabPayroll Entry` pe ON ss.payroll_entry = pe.name\n\tLEFT OUTER JOIN `tabCompany` cmp ON ss.company = cmp.name \n\tLEFT JOIN `tabBank Account` b ON pe.bank_account_for_transfer = b.name\n\tLEFT JOIN `tabAddress` adr ON pe.bank_account_for_transfer = adr.address_title\nWHERE\temp.salary_mode = 'Bank'\nAND \tss.start_date >= %(from_date)s\nAND \tss.end_date <= %(to_date)s",
+ "ref_doctype": "Salary Slip",
+ "report_name": "Bank Report",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "HR Manager"
+  }
+ ]
+}

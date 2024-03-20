@@ -216,13 +216,22 @@ doc_events = {
         "before_cancel": "csf_tz.csftz_hooks.payroll.before_cancel_payroll_entry",
     },
     "Salary Slip": {
-        "before_insert": "csf_tz.csftz_hooks.payroll.before_insert_salary_slip"
+        "before_insert": [
+            "csf_tz.csftz_hooks.payroll.before_insert_salary_slip",
+            "csf_tz.csftz_hooks.payroll.generate_component_in_salary_slip_insert",
+        ],
+        "before_save": "csf_tz.csftz_hooks.payroll.generate_component_in_salary_slip_update",
     },
     "Attendance": {
         "validate": "csf_tz.csftz_hooks.attendance.process_overtime",
     },
     "Employee Checkin": {
         "validate": "csf_tz.csftz_hooks.employee_checkin.validate",
+    },
+    "Additional Salary": {
+        "on_submit": "csf_tz.csftz_hooks.additional_salary.create_additional_salary_journal",
+        "on_cancel": "csf_tz.csftz_hooks.additional_salary.create_additional_salary_journal",
+        "before_validate": "csf_tz.csftz_hooks.additional_salary.set_employee_base_salary_in_hours",
     },
 }
 
@@ -252,6 +261,7 @@ scheduler_events = {
         "csf_tz.custom_api.create_delivery_note_for_all_pending_sales_invoice",
         "csf_tz.csf_tz.doctype.visibility.visibility.trigger_daily_alerts",
         "csf_tz.bank_api.reconciliation",
+        "csf_tz.csftz_hooks.additional_salary.generate_additional_salary_records",
     ],
     # "hourly": [
     # 	"csf_tz.tasks.hourly"

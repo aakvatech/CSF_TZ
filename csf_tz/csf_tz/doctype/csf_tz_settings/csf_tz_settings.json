@@ -33,7 +33,12 @@
   "hr_settings_section",
   "enable_overtime_calculation",
   "column_break_ihhi5",
-  "override_fetch_shift_details"
+  "override_fetch_shift_details",
+  "payware_settings_section",
+  "working_hours_per_month",
+  "default_account_for_additional_component_cash_journal",
+  "column_break_bhc2q",
+  "ot_module"
  ],
  "fields": [
   {
@@ -202,12 +207,39 @@
    "fieldtype": "Code",
    "label": "Salary Slip Email Message",
    "mandatory_depends_on": "eval: doc.override_salary_slip_email_message == 1"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "payware_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Payware Settings"
+  },
+  {
+   "fieldname": "working_hours_per_month",
+   "fieldtype": "Float",
+   "label": "Working Hours per Month"
+  },
+  {
+   "fieldname": "default_account_for_additional_component_cash_journal",
+   "fieldtype": "Link",
+   "label": "Default Account for additional component cash journal",
+   "options": "Account"
+  },
+  {
+   "fieldname": "column_break_bhc2q",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "ot_module",
+   "fieldtype": "Check",
+   "label": "OT Module"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-28 17:48:17.458699",
+ "modified": "2023-11-14 17:04:04.804029",
  "modified_by": "Administrator",
  "module": "CSF TZ",
  "name": "CSF TZ Settings",
