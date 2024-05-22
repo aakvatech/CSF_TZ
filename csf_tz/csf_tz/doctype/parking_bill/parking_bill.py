@@ -19,11 +19,11 @@ def check_bills_all_vehicles():
     plate_list = frappe.get_all("Vehicle")
     for vehicle in plate_list:
         try:
-            bill = get_bills(vehicle["name"])
+            bill = get_bills(vehicle.get("number_plate") or vehicle.get("license_plate"))
             if (
                 bill and bill.code == 6000
             ):
-                update_bill(vehicle["name"], bill)
+                update_bill(vehicle["number_plate"] or vehicle.get("license_plate") , bill)
         except Exception as e:
             frappe.log_error(frappe.get_traceback(), str(e))
     frappe.db.commit()
