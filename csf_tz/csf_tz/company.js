@@ -38,6 +38,7 @@ frappe.ui.form.on("Company", {
 	},
 
     
+    
 	refresh: function(frm) {
 		frm.add_custom_button(__('Auto create accounts'), function() {
 			frm.trigger("auto_create_account");
@@ -89,12 +90,18 @@ frappe.ui.form.on("Company", {
 			d.show();
 		}, __("Setup"));
 		
+		frm.add_custom_button(__('TRA Asset Cartegories'), function() {
+			frm.trigger("tra_asset_components");
+		}, __("Setup"));
 		
 	},
 
 	auto_create_account: function(frm) {
 		frappe.call({
 			method: 'csf_tz.custom_api.auto_create_account',
+			args: {
+				abbr: frm.doc.abbr
+			},
 			callback: function(response) {
 				if (response.message) {
 					frappe.msgprint(__('Accounts created successfully.'));
@@ -105,6 +112,9 @@ frappe.ui.form.on("Company", {
 	create_tax_template: function(frm) {
 		frappe.call({
 			method: 'csf_tz.custom_api.create_item_tax_template',
+			args: {
+				abbr: frm.doc.abbr
+			},
 			callback: function(response) {
 				if (response.message) {
 					frappe.msgprint(__('Item Tax Templates created successfully.'));
@@ -116,6 +126,9 @@ frappe.ui.form.on("Company", {
 	make_tax_category: function(frm) {
 		frappe.call({
 			method: 'csf_tz.custom_api.create_tax_category',
+			args: {
+				abbr: frm.doc.abbr
+			},
 			callback: function(response) {
 				if (response.message) {
 					frappe.msgprint(__('Tax Category created successfully.'));
@@ -126,9 +139,25 @@ frappe.ui.form.on("Company", {
 	make_salary_components_and_structure: function(frm) {
 		frappe.call({
 			method: 'csf_tz.custom_api.make_salary_components_and_structure',
+			args: {
+				abbr: frm.doc.abbr
+			},
 			callback: function(response) {
 				if (response.message) {
 					frappe.msgprint(__('Salary Components and Structure are created successfully.'));
+				}
+			}
+		})
+	},
+	tra_asset_components: function(frm) {
+		frappe.call({
+			method: 'csf_tz.custom_api.tra_asset_components',
+			args: {
+				abbr: frm.doc.abbr
+			},
+			callback: function(response) {
+				if (response.message) {
+					frappe.msgprint(__('TRA Asset cartegoies are created successfully.'));
 				}
 			}
 		})

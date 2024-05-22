@@ -2277,16 +2277,12 @@ def account_exists(account_name):
 
 
 @frappe.whitelist()
-def auto_create_account():
-    abbr = frappe.get_value(
-        "Company", frappe.defaults.get_user_default("company"), "abbr"
-    )
+def auto_create_account(abbr):
+    acc = frappe.get_doc('Account', {'name': f'Payroll Payable - {abbr}'})
+    frappe.db.set_value('Account', acc.name, 'is_group', 1)
+    frappe.db.commit()
+
     account_data = [
-        {
-            "account_name": "Payroll Payable",
-            "is_group": 1,
-            "parent_account": f"Current Liabilities - {abbr}",
-        },
         {"account_name": "NSSF Payable", "parent_account": f"Payroll Payable - {abbr}"},
         {"account_name": "NHIF Payable", "parent_account": f"Payroll Payable - {abbr}"},
         {"account_name": "PAYE Payable", "parent_account": f"Payroll Payable - {abbr}"},
@@ -2359,15 +2355,167 @@ def auto_create_account():
             account_doc.parent_account = account_info.get("parent_account")
             account_doc.insert(ignore_permissions=True)
         else:
-            frappe.throw(f"Account '{account_name}' already exists.")
+            continue
     return "Account added successfully."
+
+@frappe.whitelist()
+def tra_asset_components(abbr):
+    account_data = [
+        {
+            "account_name": "Class 1",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 2",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 3",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 4",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 5",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 6",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 7",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Class 8",
+            "is_group": 1,
+            "parent_account": f"Fixed Assets - {abbr}",
+        },
+        {
+            "account_name": "Computers and data handling equipment together with peripheral devices",
+            "parent_account": f"Class 1 - {abbr}",
+        },
+        {
+            "account_name": "Automobiles, buses and minibuses with a seating capacity of less than 30 passengers",
+            "parent_account": f"Class 1 - {abbr}",
+        },
+        {
+            "account_name": "Goods vehicles with a load capacity of less than 7 tonnes",
+            "parent_account": f"Class 1 - {abbr}",
+        },
+        {
+            "account_name": "Construction and earth-moving equipment",
+            "parent_account": f"Class 1 - {abbr}",
+        },
+        {
+            "account_name": "Buses with a seating capacity of 30 or more passengers",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Heavy general purpose or specialised trucks",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Trailers and trailer-mounted containers",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Railroad cars, locomotives, and equipment",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Vessels, barges, tugs, and similar water transportation equipment",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Aircraft",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Other self-propelling vehicles",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Plant and machinery used in manufacturing or mining operations",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Specialised public utility plant, equipment, and machinery",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Irrigation installations and equipment",
+            "parent_account": f"Class 2 - {abbr}",
+        },
+        {
+            "account_name": "Office furniture, fixtures and equipment",
+            "parent_account": f"Class 3 - {abbr}",
+        },
+        {
+            "account_name": "Any asset not included in another Class",
+            "parent_account": f"Class 3 - {abbr}",
+        },
+        {
+            "account_name": "Natural resource exploration and production rights",
+            "parent_account": f"Class 4 - {abbr}",
+        },
+        {
+            "account_name": "Assets in respect of natural resources prospecting, exploration and development expenditure",
+            "parent_account": f"Class 4 - {abbr}",
+        },
+        {
+            "account_name": "Buildings, structures and similar works of a permanent nature used in agriculture",
+            "parent_account": f"Class 5 - {abbr}",
+        },
+        {
+            "account_name": "Buildings, structures and similar works of a permanent nature used in livestock farming or fish farming",
+            "parent_account": f"Class 5 - {abbr}",
+        },
+        {
+            "account_name": "Buildings, structures and similar works of a permanent nature other than those mentioned in Class 5",
+            "parent_account": f"Class 6 - {abbr}",
+        },
+        {
+            "account_name": "Intangible assets other than those in Class 4",
+            "parent_account": f"Class 7 - {abbr}",
+        },
+        {
+            "account_name": "Plant and machinery used in agriculture",
+            "parent_account": f"Class 8 - {abbr}",
+        },
+        {
+            "account_name": "Electronic Fiscal Devices (For non VAT registered persons)",
+            "parent_account": f"Class 8 - {abbr}",
+        },
+    ]
+
+    for account_info in account_data:
+        account_name = account_info.get("account_name")
+
+        if not account_exists(account_name):
+            account_doc = frappe.new_doc("Account")
+            account_doc.account_name = account_info.get("account_name")
+            account_doc.is_group = account_info.get("is_group")
+            account_doc.account_type = account_info.get("account_type")
+            account_doc.parent_account = account_info.get("parent_account")
+            account_doc.insert(ignore_permissions=True)
+        else:
+            continue
+    return "TRA Asset Categories added successfully."
 
 
 @frappe.whitelist()
-def create_item_tax_template():
-    abbr = frappe.get_value(
-        "Company", frappe.defaults.get_user_default("company"), "abbr"
-    )
+def create_item_tax_template(abbr):
     item_tax_template_list = [
         {"title": f"Tanzania Exempted Sales", "tax_type": f"OUTPUT VAT - 18% - {abbr}"},
         {
@@ -2399,7 +2547,7 @@ def create_item_tax_template():
 
 
 @frappe.whitelist()
-def create_tax_category():
+def create_tax_category(abbr):
     tax_category_list = ["Sales", "Non Taxable", "Purchase"]
 
     for tax_category_name in tax_category_list:
@@ -2413,14 +2561,11 @@ def create_tax_category():
 
 
 @frappe.whitelist()
-def linking_tax_template(doctype, default_tax_template):
+def linking_tax_template(doctype, default_tax_template, abbr):
     # frappe.throw(str(default_tax_template))
     # tax_template = default_tax_template[0]
     # frappe.throw(str(tax_template))
 
-    abbr = frappe.get_value(
-        "Company", frappe.defaults.get_user_default("company"), "abbr"
-    )
     item_list = frappe.get_all("Item", filters=default_tax_template)
     # frappe.throw(str(item_list))
 
@@ -2464,10 +2609,7 @@ def linking_tax_template(doctype, default_tax_template):
 
 
 @frappe.whitelist()
-def make_salary_components_and_structure():
-    abbr = frappe.get_value(
-        "Company", frappe.defaults.get_user_default("company"), "abbr"
-    )
+def make_salary_components_and_structure(abbr):
 
     salary_components_earnings_list = [
         {
