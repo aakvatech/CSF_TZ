@@ -16,6 +16,13 @@ frappe.query_reports["Item Price by Price List"] = {
 			"fieldtype": "Percent",
 			"default": "18",
 			"mandatory": 1,
-		}
+		},
+	    {
+			"fieldname": "barcode",
+			"label": __("Scan Barcode"),
+			"fieldtype": "Data",
+			"default": "",
+			"options": "Barcode"
+        },
 	]
 }

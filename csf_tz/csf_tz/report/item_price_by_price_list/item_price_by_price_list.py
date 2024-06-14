@@ -80,9 +80,20 @@ def get_columns():
 
 def get_data(filters):
     conditions = ""
-    if filters.get("item_description"):
-        conditions += f""" AND (i.description LIKE '%{filters["item_description"]}%' OR i.item_code = '{filters["item_description"]}')"""
+    if filters.get("barcode"):
+        # Fetch item code based on barcode
+        item_code = db.get_value("Item Barcode", {"barcode": filters.get("barcode")}, "parent")
+        if item_code:
+            # Fetch and assign the item description to the filters dictionary
+            item_description = frappe.db.get_value("Item", {"item_code": item_code}, "description")
+            if item_description:
+                filters["item_description"] = item_description
+            else:
+                frappe.msgprint(_("No description found for item with barcode: ") + filters.get("barcode"), title="Warning")
+                return []  # Exit function if no description is found
 
+    if filters.get("item_description"):
+        conditions += f" AND (i.description LIKE '%{filters['item_description']}%' OR i.item_code = '{filters['item_description'] or filters.get('barcode')}')"
     # Example SQL Query to fetch data
     sql = f"""
         SELECT
