@@ -214,6 +214,7 @@ doc_events = {
     },
     "Stock Entry": {
         "validate": "csf_tz.custom_api.calculate_total_net_weight",
+        "on_submit": "csf_tz.csftz_hooks.bom.on_submit_stock_entry",
     },
     "Student Applicant": {
         "on_update_after_submit": "csf_tz.csftz_hooks.student_applicant.make_student_applicant_fees",
@@ -234,6 +235,9 @@ doc_events = {
     },
     "Employee Checkin": {
         "validate": "csf_tz.csftz_hooks.employee_checkin.validate",
+    },
+    "BOM": {
+        "validate": "csf_tz.csftz_hooks.bom.calculate_additional_costs",
     },
 }
 
