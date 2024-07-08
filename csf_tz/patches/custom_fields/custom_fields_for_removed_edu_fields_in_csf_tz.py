@@ -336,14 +336,6 @@ def execute():
                 "read_only": 1
             },
             {
-                "allow_on_submit": 1,
-                "fieldname": "import_file",
-                "fieldtype": "Link",
-                "insert_after": "clearance_date",
-                "label": "Import File",
-                "options": "Import File"
-            },
-            {
                 "fieldname": "from_date",
                 "fieldtype": "Date",
                 "insert_after": "auto_repeat",
@@ -375,13 +367,6 @@ def execute():
             },
         ],
         "Landed Cost Voucher":[
-            {
-                "fieldname": "import_file",
-                "fieldtype": "Link",
-                "insert_after": "sec_break1",
-                "label": "Import File",
-                "options": "Import File"
-            },
         ],
         "Material Request Item":[
             {
@@ -490,14 +475,6 @@ def execute():
                 "fieldtype": "Section Break",
                 "insert_after": "language",
                 "label": "Reference",
-            },
-            {
-                "allow_on_submit": 1,
-                "fieldname": "import_file",
-                "fieldtype": "Link",
-                "insert_after": "reference",
-                "label": "Import File",
-                "options": "Import File"
             },
         ],
         "Purchase Invoice Item":[
@@ -916,30 +893,6 @@ def execute():
                 "in_list_view": 1,
                 "insert_after": "offence",
                 "label": "FULLY PAID",
-            },
-        ],
-        "Vehicle Log":[
-            {
-                "fieldname": "column_break_11",
-                "fieldtype": "Column Break",
-                "insert_after": "odometer",
-                "label": "",
-            },
-            {
-                "fieldname": "trip_destination",
-                "fieldtype": "Data",
-                "in_list_view": 1,
-                "in_standard_filter": 1,
-                "insert_after": "column_break_11",
-                "label": "Trip Destination",
-                "reqd": 1
-            },
-            {
-                "fieldname": "destination_description",
-                "fieldtype": "Data",
-                "insert_after": "trip_destination",
-                "label": "Destination Description",
-                "translatable": 1
             },
         ],
         "Vehicle Service":[
