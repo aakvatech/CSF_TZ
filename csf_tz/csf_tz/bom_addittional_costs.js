@@ -1,6 +1,6 @@
 frappe.ui.form.on("BOM", {
     refresh: function (frm) {
-        frm.set_query("expense_account", "custom_additional_costs", function () {
+        frm.set_query("expense_account", "additional_costs", function () {
             return {
                 filters: {
                     account_type: [
