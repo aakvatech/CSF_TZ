@@ -94,7 +94,7 @@
         "doctype": "Custom Field"
     },
     {
-        "name": "BOM-additiional_costs",
+        "name": "BOM-additional_costs",
         "owner": "Administrator",
         "creation": "2024-07-24 12:57:54.621355",
         "modified": "2024-07-24 16:17:31.683958",
@@ -103,8 +103,8 @@
         "idx": 29,
         "is_system_generated": 0,
         "dt": "BOM",
-        "label": "Additiional Costs",
-        "fieldname": "additiional_costs",
+        "label": "Additional Costs",
+        "fieldname": "additional_costs",
         "insert_after": "image",
         "length": 0,
         "fieldtype": "Table",

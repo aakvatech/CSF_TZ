@@ -67,7 +67,6 @@ doctype_js = {
     "Landed Cost Voucher": "csf_tz/landed_cost_voucher.js",
     "Additional Salary": "csf_tz/additional_salary.js",
     "BOM": "csf_tz/bom_addittional_costs.js",
-    "Landed Cost Voucher": "csf_tz/landed_cost_item.js"
 }
 doctype_list_js = {
     "Custom Field": "csf_tz/custom_field.js",
