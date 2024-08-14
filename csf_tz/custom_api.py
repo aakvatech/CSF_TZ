@@ -2356,7 +2356,7 @@ def auto_create_account(abbr):
             account_doc.parent_account = account_info.get("parent_account")
             account_doc.insert(ignore_permissions=True)
         else:
-            frappe.throw(f"Account '{account_name}' already exists.")
+            continue
     return "Account added successfully."
 
 
@@ -2381,13 +2381,18 @@ def create_item_tax_template(abbr):
     ]
 
     for item_tax_template_info in item_tax_template_list:
-        item_tax_template_doc = frappe.new_doc("Item Tax Template")
-        item_tax_template_doc.title = item_tax_template_info.get("title")
-        item_tax_template_doc.append(
-            "taxes",
-            {"tax_type": item_tax_template_info.get("tax_type"), "tax_rate": ""},
-        )
-        item_tax_template_doc.insert()
+        existing_template = frappe.db.exists("Item Tax Template", {"title": item_tax_template_info.get("title")},)
+        
+        if not existing_template:
+            item_tax_template_doc = frappe.new_doc("Item Tax Template")
+            item_tax_template_doc.title = item_tax_template_info.get("title")
+            item_tax_template_doc.append(
+                "taxes",
+                {"tax_type": item_tax_template_info.get("tax_type"), "tax_rate": ""},
+            )
+            item_tax_template_doc.insert()
+        else:
+            continue
 
     return "Tax Template added successfully."
 
@@ -2397,18 +2402,23 @@ def create_tax_category():
     tax_category_list = ["Sales", "Non Taxable", "Purchase"]
 
     for tax_category_name in tax_category_list:
-        tax_category_doc = frappe.new_doc("Tax Category")
-        tax_category_doc.name = tax_category_name
-        tax_category_doc.title = tax_category_name
-        tax_category_doc.insert(ignore_permissions=True)
-        tax_category_doc.save()
+        existing_tax_category = frappe.db.exists("Tax Category",{"title": tax_category_name},)
+        
+        if not existing_tax_category:
+            tax_category_doc = frappe.new_doc("Tax Category")
+            tax_category_doc.name = tax_category_name
+            tax_category_doc.title = tax_category_name
+            tax_category_doc.insert(ignore_permissions=True)
+            tax_category_doc.save()
+        else:
+            continue
 
-    return "Tax Template added to Supplier Groups successfully."
+    return "Tax Categories added successfully."
 
 
 @frappe.whitelist()
 def linking_tax_template(doctype, default_tax_template, abbr):
-    item_list = frappe.get_all("Item", filters=default_tax_template)
+    item_list = frappe.db.get_all("Item", filters=default_tax_template)
 
     for item in item_list:
         item_doc = frappe.get_doc("Item", item.name, fields=["default_tax_template"])
@@ -2639,63 +2649,73 @@ def make_salary_components_and_structure(abbr ):
     # frappe.throw(str(salary_components_list))
 
     for salary_component in salary_components_list:
-        salary_component_doc = frappe.new_doc("Salary Component")
-        salary_component_doc.salary_component = salary_component.get("salary_component")
-        salary_component_doc.type = salary_component.get("type")
-        salary_component_doc.abbr = salary_component.get("abbr")
-        salary_component_doc.remove_if_zero_valued = salary_component.get(
-            "remove_if_zero_valued"
-        )
-        salary_component_doc.do_not_include_in_total = salary_component.get(
-            "do_not_include_in_total"
-        )
-        salary_component_doc.append(
-            "accounts", {"account": salary_component.get("account")}
-        )
-        salary_component_doc.insert()
+        existing_salary_component = frappe.db.exists("Salary Component",{"salary_component": salary_component.get("salary_component")},)
+        
+        if not existing_salary_component:
+            salary_component_doc = frappe.new_doc("Salary Component")
+            salary_component_doc.salary_component = salary_component.get("salary_component")
+            salary_component_doc.type = salary_component.get("type")
+            salary_component_doc.abbr = salary_component.get("abbr")
+            salary_component_doc.remove_if_zero_valued = salary_component.get(
+                "remove_if_zero_valued"
+            )
+            salary_component_doc.do_not_include_in_total = salary_component.get(
+                "do_not_include_in_total"
+            )
+            salary_component_doc.append(
+                "accounts", {"account": salary_component.get("account")}
+            )
+            salary_component_doc.insert()
+        else:
+            continue
 
-    salary_structure_doc = frappe.new_doc("Salary Structure")
-    salary_structure_doc.name = "Tanzania Mainland"
-    salary_structure_doc.is_active = "Yes"
-    for salary_components in salary_components_earnings_list:
-        salary_structure_doc.append(
-            "earnings",
-            {
-                "salary_component": salary_components.get("salary_component"),
-                "depends_on_payment_days": salary_components.get(
-                    "depends_on_payment_days"
-                ),
-                "is_tax_applicable": salary_components.get("is_tax_applicable"),
-                "amount_based_on_formula": salary_components.get(
-                    "amount_based_on_formula"
-                ),
-                "do_not_include_in_total": salary_components.get(
-                    "do_not_include_in_total"
-                ),
-                "formula": salary_components.get("formula"),
-            },
-        )
-    for salary_components in salary_components_deduction_list:
-        salary_structure_doc.append(
-            "deductions",
-            {
-                "salary_component": salary_components.get("salary_component"),
-                "depends_on_payment_days": salary_components.get(
-                    "depends_on_payment_days"
-                ),
-                "is_tax_applicable": salary_components.get("is_tax_applicable"),
-                "amount_based_on_formula": salary_components.get(
-                    "amount_based_on_formula"
-                ),
-                "do_not_include_in_total": salary_components.get(
-                    "do_not_include_in_total"
-                ),
-                "formula": salary_components.get("formula"),
-            },
-        )
-    salary_structure_doc.insert(ignore_permissions=True)
-    salary_structure_doc.submit()
-    return "Salary Components and Structure are created successfully."
+    salary_structure_doc_name = "Tanzania Mainland"
+    existing_salary_strusture = frappe.db.exists("Salary Structure",{"name": salary_structure_doc_name})
+    
+    if not existing_salary_strusture:
+        salary_structure_doc = frappe.new_doc("Salary Structure")
+        salary_structure_doc.name = salary_structure_doc_name
+        salary_structure_doc.is_active = "Yes"
+        for salary_components in salary_components_earnings_list:
+            salary_structure_doc.append(
+                "earnings",
+                {
+                    "salary_component": salary_components.get("salary_component"),
+                    "depends_on_payment_days": salary_components.get(
+                        "depends_on_payment_days"
+                    ),
+                    "is_tax_applicable": salary_components.get("is_tax_applicable"),
+                    "amount_based_on_formula": salary_components.get(
+                        "amount_based_on_formula"
+                    ),
+                    "do_not_include_in_total": salary_components.get(
+                        "do_not_include_in_total"
+                    ),
+                    "formula": salary_components.get("formula"),
+                },
+            )
+        for salary_components in salary_components_deduction_list:
+            salary_structure_doc.append(
+                "deductions",
+                {
+                    "salary_component": salary_components.get("salary_component"),
+                    "depends_on_payment_days": salary_components.get(
+                        "depends_on_payment_days"
+                    ),
+                    "is_tax_applicable": salary_components.get("is_tax_applicable"),
+                    "amount_based_on_formula": salary_components.get(
+                        "amount_based_on_formula"
+                    ),
+                    "do_not_include_in_total": salary_components.get(
+                        "do_not_include_in_total"
+                    ),
+                    "formula": salary_components.get("formula"),
+                },
+            )
+        salary_structure_doc.insert(ignore_permissions=True)
+        salary_structure_doc.submit()
+    else:
+        return "Salary Components and Structure are created successfully."
 
 
 def target_warehouse_based_price_list(doc, method):
